@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 echo.
 echo ========================================
-echo   Setting up and Pushing to GitHub
+echo   Syncing and Pushing to GitHub
 echo ========================================
 echo.
 
@@ -23,6 +23,13 @@ if errorlevel 1 (
 )
 
 echo.
+echo Fetching latest from GitHub...
+git fetch origin
+
+echo Pulling latest changes...
+git pull origin main
+
+echo.
 echo Staging all changes...
 git add .
 
@@ -30,19 +37,13 @@ echo Committing changes...
 git commit -m "Update from local: %date% %time%"
 
 echo.
-echo Setting up tracking and pushing...
+echo Pushing to GitHub...
 git branch -M main
 git push -u origin main
 
-if errorlevel 1 (
-    echo.
-    echo Pushing to master branch...
-    git push -u origin master
-)
-
 echo.
 echo ========================================
-echo   Done! Changes pushed to GitHub
+echo   Done! Changes synced to GitHub
 echo ========================================
 echo.
 pause
