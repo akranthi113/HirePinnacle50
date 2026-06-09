@@ -27,7 +27,7 @@ echo Fetching latest from GitHub...
 git fetch origin
 
 echo Pulling latest changes...
-git pull origin main
+git pull origin main --allow-unrelated-histories
 
 echo.
 echo Staging all changes...
@@ -37,13 +37,27 @@ echo Committing changes...
 git commit -m "Update from local: %date% %time%"
 
 echo.
+echo ========================================
+echo Ready to push to GitHub
+echo ========================================
+echo.
+set /p "proceed=Enter your GitHub username to proceed with push (or press Ctrl+C to cancel): "
+
+echo.
 echo Pushing to GitHub...
 git branch -M main
-git push -u origin main
+git push -u origin main --force-with-lease
+
+if errorlevel 1 (
+    echo.
+    echo ERROR: Push failed
+    pause
+    exit /b 1
+)
 
 echo.
 echo ========================================
-echo   Done! Changes synced to GitHub
+echo   SUCCESS! Changes pushed to GitHub
 echo ========================================
 echo.
 pause
