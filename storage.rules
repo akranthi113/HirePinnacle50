@@ -1,0 +1,21 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if the user has a profile in the users collection in Firestore
+    function hasProfile() {
+      return firestore.exists(/databases/(default)/documents/users/$(request.auth.uid));
+    }
+
+    match /resumes/{fileName} {
+      // Read: authenticated users with a profile (recruiters & admins)
+      allow read: if isAuthenticated() && hasProfile();
+      // Write: open for public candidate resume uploads
+      allow write: if true;
+    }
+  }
+}

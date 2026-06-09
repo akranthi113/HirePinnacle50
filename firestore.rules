@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Check if user is logged in
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if the user has a registered profile in the users collection
+    function hasProfile() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+    
+    // Check if user is an admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // candidates collection rules
+    match /candidates/{candidateId} {
+      // Allow creation by anyone (public candidate application form)
+      allow create: if true;
+      // Allow read, update, delete by recruiters and admins (users with profiles)
+      allow read, update, delete: if isAuthenticated() && hasProfile();
+    }
+
+    // auditLogs collection rules
+    match /auditLogs/{logId} {
+      // Write: authenticated users with a profile (recruiters/admins updating candidate status)
+      allow write: if isAuthenticated() && hasProfile();
+      // Read: admin only
+      allow read: if isAdmin();
+    }
+
+    // users collection rules
+    match /users/{userId} {
+      // Allow users to read their own profile to verify role
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      // Write: admin only
+      allow write: if isAdmin();
+    }
+  }
+}
