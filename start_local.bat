@@ -1,29 +1,47 @@
 @echo off
-title HirePinnacle50 - Development Server
+cls
+title HirePinnacle50 Development Server
+echo.
 echo ====================================================================
-echo Starting HirePinnacle50 Development Server
+echo         HirePinnacle50 - Starting Development Server
 echo ====================================================================
 echo.
+cd /d "%~dp0"
 
-REM Check if node_modules exists, if not install dependencies
-if not exist node_modules (
-    echo Installing dependencies (this will run once)...
+echo Checking for Node.js...
+node --version >nul 2>&1
+if errorlevel 1 (
+    echo ERROR: Node.js is not installed
+    echo Download from: https://nodejs.org/
     echo.
+    pause
+    exit /b 1
+)
+
+echo Node.js found!
+echo.
+echo Installing dependencies if needed...
+if not exist node_modules (
+    echo Running: npm install
     call npm install
     if errorlevel 1 (
-        echo ERROR: Failed to install dependencies
-        echo Make sure Node.js is installed: https://nodejs.org/
+        echo ERROR: npm install failed
         pause
         exit /b 1
     )
-    echo.
 )
 
-echo [1/2] Opening browser to http://localhost:5173...
-start http://localhost:5173
 echo.
-echo [2/2] Starting Vite development server...
-echo Press Ctrl+C to stop the server.
+echo Dependencies ready!
+echo.
+echo Opening browser to http://localhost:5173...
+timeout /t 2 /nobreak >nul
+start http://localhost:5173
+
+echo.
+echo Starting development server...
+echo Type Ctrl+C to stop
 echo.
 call npm run dev
+
 pause

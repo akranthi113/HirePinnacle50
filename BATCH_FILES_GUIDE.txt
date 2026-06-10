@@ -1,0 +1,97 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                   HirePinnacle50 Batch Files Guide               ║
+╚══════════════════════════════════════════════════════════════════╝
+
+QUICK START (Choose One):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. First Time Setup:
+   └─ Double-click: install.bat
+   └─ Then: dev.bat
+
+2. Regular Development:
+   └─ Double-click: dev.bat
+   └─ Opens browser on http://localhost:5173
+
+3. Build for Deployment:
+   └─ Double-click: build.bat
+   └─ Creates 'dist' folder
+
+4. Push to GitHub:
+   └─ Double-click: push_to_main.bat
+   └─ Enter GitHub credentials when prompted
+
+
+BATCH FILES EXPLAINED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 install.bat
+   Purpose: Install npm dependencies
+   When: First time, or after adding new packages
+   Run once, then you can use dev.bat
+
+🚀 dev.bat
+   Purpose: Start development server
+   When: Every time you want to code
+   Access at: http://localhost:5173
+
+🔨 build.bat
+   Purpose: Build for production
+   When: Before deploying to GitHub
+   Creates 'dist' folder with all optimized files
+
+📤 push_to_main.bat
+   Purpose: Sync and push changes to GitHub
+   When: After making changes
+   Asks for GitHub credentials
+
+
+TROUBLESHOOTING:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ "Node.js is not installed"
+   → Download from: https://nodejs.org/
+   → Install and restart your computer
+   → Try again
+
+❌ Batch file won't open
+   → Right-click → "Run as administrator"
+   → Or drag file into Command Prompt window
+
+❌ "npm is not recognized"
+   → Node.js may not be installed correctly
+   → Restart computer after installing Node.js
+   → Or add Node.js to PATH
+
+❌ Port 5173 already in use
+   → Close other Vite servers
+   → Or change port in vite.config.js
+
+❌ Dependencies not installed
+   → Run install.bat first
+   → Make sure Node.js is installed
+
+
+COMMAND LINE ALTERNATIVE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If batch files don't work, use Command Prompt:
+
+   1. Press Windows + R
+   2. Type: cmd
+   3. Navigate to project: cd Desktop\playground\Hirepinnacle50
+   4. Run commands:
+      - npm install
+      - npm run dev
+      - npm run build
+      - git push origin main
+
+
+IMPORTANT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Always use install.bat BEFORE dev.bat first time
+✓ dev.bat keeps running - press Ctrl+C to stop
+✓ build.bat only needs to run before pushing to GitHub
+✓ push_to_main.bat needs Git installed: https://git-scm.com/
+

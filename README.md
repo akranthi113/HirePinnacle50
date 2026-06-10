@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # HirePinnacle50
 
 A React + Vite recruitment platform for hiring candidates efficiently using Supabase backend.
@@ -114,3 +115,6 @@ For issues, check:
 1. Browser console for errors
 2. Supabase connection status
 3. Environment variables in `.env`
+=======
+# HirePinnacle50
+>>>>>>> c61e551d8d27476299206aeb7c5800db6b5e8093
