@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -48,7 +48,7 @@ const PrivacyPolicy = () => (
 
 function App() {
   return (
-    <Router basename="/HirePinnacle50">
+    <Router>
       <AuthProvider>
         <div className="flex flex-col min-h-screen bg-slate-50">
           <Navbar />

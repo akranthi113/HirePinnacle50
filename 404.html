@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=/HirePinnacle50/index.html" />
+  <script>
+    // Preserve hash route if present
+    const hash = window.location.hash;
+    if (hash) {
+      const target = new URL('/HirePinnacle50/index.html', window.location.origin);
+      target.hash = hash;
+      window.location.replace(target.toString());
+    } else {
+      window.location.replace('/HirePinnacle50/index.html');
+    }
+  </script>
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting to the application...</p>
+</body>
+</html>
