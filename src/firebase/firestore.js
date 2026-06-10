@@ -100,6 +100,21 @@ export const addContactMessage = async (messageData) => {
   }
 };
 
+// ── Delete a contact message by id ──
+export const deleteContactMessage = async (msgId) => {
+  try {
+    const { error } = await supabase
+      .from("contact_messages")
+      .delete()
+      .eq("id", msgId);
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (error) {
+    console.error("Error deleting contact message:", error);
+    return { success: false, error: error.message };
+  }
+};
+
 export const getContactMessages = async () => {
   try {
     const { data, error } = await supabase
