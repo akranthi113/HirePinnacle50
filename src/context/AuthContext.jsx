@@ -181,16 +181,8 @@ export const AuthProvider = ({ children }) => {
   // Admin creating recruiter accounts
   const registerRecruiter = async (email, password, displayName) => {
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://cwdjrandzilgwzycintr.supabase.co";
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_9i0nyym4g0iBMOz8ScXGpA_X_1b_t_v";
-
-      // Create a secondary Supabase client instance with persistSession: false so the admin is not signed out
-      const tempSupabase = createClient(supabaseUrl, supabaseAnonKey, {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false
-        }
-      });
+      // Use shared supabase client (public anon key) for recruiter registration
+      const tempSupabase = supabase;
 
       const { data, error } = await tempSupabase.auth.signUp({
         email: email.toLowerCase().trim(),
