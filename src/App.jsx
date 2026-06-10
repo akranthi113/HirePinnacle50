@@ -48,7 +48,7 @@ const PrivacyPolicy = () => (
 
 function App() {
   return (
-    <Router>
+    <Router basename="/HirePinnacle50">
       <AuthProvider>
         <div className="flex flex-col min-h-screen bg-slate-50">
           <Navbar />
