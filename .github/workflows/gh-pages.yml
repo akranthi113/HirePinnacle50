@@ -2,6 +2,10 @@
 # It runs on pushes to the `main` branch (adjust if your default branch is different).
 # The `peaceiris/actions-gh-pages` action is used for reliable deployment.
 
+# Explicit permission for the workflow to push to the repository
+permissions:
+  contents: write
+
 name: Deploy to GitHub Pages
 
 on:

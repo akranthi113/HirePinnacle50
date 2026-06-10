@@ -1,10 +1,16 @@
 @echo off
 cls
 echo.
+@echo off
+cls
+echo.
 echo ====================================================================
 echo                    Pushing to GitHub
 echo ====================================================================
 echo.
+
+:: Simple push script – uses stored git credentials
+set REPO_URL=git@github.com:akranthi113/HirePinnacle50.git
 
 cd /d "%~dp0"
 
@@ -30,9 +36,8 @@ echo Committing...
 git commit -m "Update: %date% %time%"
 
 echo.
-echo Pushing to GitHub (you may be asked for credentials)...
-git branch -M main
-git push -u origin main --force-with-lease
+echo Pushing to GitHub...
+git push git@github.com:akranthi113/HirePinnacle50.git main
 
 if errorlevel 1 (
     echo.
@@ -43,4 +48,3 @@ if errorlevel 1 (
 )
 
 pause
-
