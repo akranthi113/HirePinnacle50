@@ -65,7 +65,7 @@ git push origin main
 ### 3. Enable GitHub Pages
 - Go to GitHub repo → Settings → Pages
 - Select "Deploy from a branch"
-- Choose `main` branch and `/root` folder
+- Choose `main` branch and `/docs` folder
 - Save
 
 **Your site will be live at**: `https://akranthi113.github.io/HirePinnacle50/`
