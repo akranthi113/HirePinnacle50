@@ -48,4 +48,4 @@ if errorlevel 1 (
     echo SUCCESS! Pushed to GitHub.
 )
 
-pause
+rem script finished
