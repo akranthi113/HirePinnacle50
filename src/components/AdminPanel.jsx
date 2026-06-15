@@ -6,7 +6,9 @@ import {
   deleteRecruiterRecord, 
   getAuditLogs, 
   getCandidates, 
-  deleteCandidateRecord 
+  deleteCandidateRecord,
+  getContactMessages,
+  deleteContactMessage
 } from "../firebase/firestore";
 import { exportToCSV } from "../utils/exportCSV";
 import { 
@@ -30,6 +32,7 @@ const AdminPanel = () => {
   const [auditLogs, setAuditLogs] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [contactMessages, setContactMessages] = useState([]);
 
   // Form States for New Recruiter
   const [newEmail, setNewEmail] = useState("");
@@ -54,10 +57,11 @@ const AdminPanel = () => {
     setLoading(true);
     
     // Fetch recruiters, audit logs, and candidates
-    const [recRes, logRes, candRes] = await Promise.all([
+    const [recRes, logRes, candRes, contactRes] = await Promise.all([
       getRecruitersList(),
       getAuditLogs(),
-      getCandidates()
+      getCandidates(),
+      getContactMessages()
     ]);
 
     if (recRes.error) triggerToast(recRes.error, "error");
@@ -68,6 +72,9 @@ const AdminPanel = () => {
 
     if (candRes.error) triggerToast(candRes.error, "error");
     else setCandidates(candRes.candidates);
+
+    if (contactRes.error) triggerToast(contactRes.error, "error");
+    else setContactMessages(contactRes.messages);
 
     setLoading(false);
   };
@@ -155,6 +162,25 @@ const AdminPanel = () => {
       loadAdminData();
     } catch (err) {
       triggerToast(err.message || "Failed to delete candidate", "error");
+    }
+  };
+
+  const handleDeleteContact = async (messageId) => {
+    const confirmed = window.confirm("Delete this contact inquiry? This action cannot be undone.");
+    if (!confirmed) return;
+
+    try {
+      const { success, error } = await deleteContactMessage(messageId);
+      if (!success) {
+        triggerToast(error || "Unable to delete contact message.", "error");
+        return;
+      }
+
+      // Remove the deleted message from state for immediate UI update
+      setContactMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+      triggerToast("Contact inquiry deleted.");
+    } catch (err) {
+      triggerToast(err.message || "Failed to delete contact inquiry", "error");
     }
   };
 
@@ -511,6 +537,51 @@ const AdminPanel = () => {
           </table>
         </div>
       </div>
+
+{/* Contact Messages Administration */}
+<div className="bg-white rounded-xl border border-slate-100 p-6 shadow-xs mt-8">
+  <h3 className="text-lg font-bold text-navy-800 mb-4">Contact Messages</h3>
+  <div className="overflow-x-auto max-h-80">
+    <table className="min-w-full divide-y divide-slate-100 text-xs">
+      <thead className="bg-slate-50 text-left text-xxs font-bold text-slate-500 uppercase tracking-wider select-none sticky top-0">
+        <tr>
+          <th className="px-4 py-3">Name</th>
+          <th className="px-4 py-3">Email</th>
+          <th className="px-4 py-3">Message</th>
+          <th className="px-4 py-3 text-right">Action</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-slate-100 text-slate-700">
+        {loading ? (
+          <tr>
+            <td colSpan="4" className="py-6 text-center text-slate-400">Loading messages...</td>
+          </tr>
+        ) : contactMessages.length === 0 ? (
+          <tr>
+            <td colSpan="4" className="py-6 text-center text-slate-400">No contact messages.</td>
+          </tr>
+        ) : (
+          contactMessages.map((msg) => (
+            <tr key={msg.id} className="hover:bg-slate-50 transition">
+              <td className="px-4 py-3 font-semibold text-navy-800">{msg.name}</td>
+              <td className="px-4 py-3">{msg.email}</td>
+              <td className="px-4 py-3">{msg.message}</td>
+              <td className="px-4 py-3 text-right">
+                <button
+                  onClick={() => handleDeleteContact(msg.id)}
+                  className="p-1 rounded border bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700"
+                  title="Delete Contact Message"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
     </div>
   );
 };

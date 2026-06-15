@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import DashboardComponent from "../components/Dashboard";
+import RecruiterJobsSection from "../components/RecruiterJobsSection";
 import { getCandidates, getContactMessages, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord } from "../firebase/firestore";
 
 const Dashboard = () => {
@@ -79,6 +80,8 @@ const Dashboard = () => {
           deleteContactMessage={deleteContactMessage}
           deleteCandidateRecord={deleteCandidateRecord}
         />
+        {/* Recruiter Job Management */}
+        <RecruiterJobsSection currentUser={currentUser} />
       </div>
     </div>
   );

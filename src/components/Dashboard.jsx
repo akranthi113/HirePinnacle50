@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getCandidates, getContactMessages, updateCandidateStatus } from "../firebase/firestore";
 import { sendCandidateStatusEmail } from "../utils/emailService";
 import { exportToCSV } from "../utils/exportCSV";
 import AnalyticsCards from "./AnalyticsCards";
@@ -8,13 +7,20 @@ import NotificationBadge from "./NotificationBadge";
 import CandidateRow from "./CandidateRow";
 import { Search, Filter, RefreshCw, Download, CheckCircle, AlertCircle, LayoutGrid } from "lucide-react";
 
-const Dashboard = () => {
+const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord, loading = false }) => {
   const { currentUser, userProfile } = useAuth();
-  
-  const [candidates, setCandidates] = useState([]);
-  const [contactMessages, setContactMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [candidatesState, setCandidates] = useState(candidates);
+  const [contactMessagesState, setContactMessagesState] = useState(contactMessages);
+
+  // Sync props updates
+  useEffect(() => {
+    setCandidates(candidates);
+  }, [candidates]);
+
+  useEffect(() => {
+    setContactMessagesState(contactMessages);
+  }, [contactMessages]);  
   
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,31 +40,11 @@ const Dashboard = () => {
     setTimeout(() => setToast({ show: false, message: "", type: "success" }), 3000);
   };
 
-  const loadCandidatesData = async (silent = false) => {
-    if (!silent) setLoading(true);
-    else setRefreshing(true);
-
-    const [candidateResult, contactResult] = await Promise.all([getCandidates(), getContactMessages()]);
-
-    if (candidateResult.error) {
-      triggerToast(candidateResult.error, "error");
-    } else {
-      setCandidates(candidateResult.candidates);
-    }
-
-    if (contactResult.error) {
-      triggerToast(contactResult.error, "error");
-    } else {
-      setContactMessages(contactResult.messages);
-    }
-
-    setLoading(false);
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refreshData();
     setRefreshing(false);
   };
-
-  useEffect(() => {
-    loadCandidatesData();
-  }, []);
 
   const handleStatusChange = async (candidateId, candidateName, oldStatus, newStatus) => {
     if (!currentUser) return;
@@ -70,7 +56,7 @@ const Dashboard = () => {
         candidateName,
         oldStatus,
         newStatus,
-        currentUser.uid,
+        currentUser.id,
         currentUser.email
       );
 
@@ -87,7 +73,7 @@ const Dashboard = () => {
 
       // 2. Dispatch status change email if newStatus is Interview or Selected
       if (newStatus === "Interview" || newStatus === "Selected") {
-        const candidate = candidates.find((c) => c.id === candidateId);
+        const candidate = candidatesState.find((c) => c.id === candidateId);
         if (candidate && candidate.email) {
           // Trigger async emailing
           sendCandidateStatusEmail(candidate.email, candidate.fullName, newStatus)
@@ -106,6 +92,36 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteCandidate = async (candidateId) => {
+    const confirmed = window.confirm("Delete this candidate record? This action cannot be undone.");
+    if (!confirmed) return;
+
+    const { success, error } = await deleteCandidateRecord(candidateId);
+    if (!success) {
+      triggerToast(error || "Unable to delete candidate.", "error");
+      return;
+    }
+
+    triggerToast("Candidate record deleted.");
+    setCandidates((prev) => prev.filter((c) => c.id !== candidateId));
+  };
+
+  const handleDeleteContact = async (messageId) => {
+    const confirmed = window.confirm("Delete this contact inquiry? This action cannot be undone.");
+    if (!confirmed) return;
+
+    console.log('Attempting to delete contact message with id:', messageId);
+    const { success, error } = await deleteContactMessage(messageId);
+    if (!success) {
+      console.error('Delete contact message failed:', error);
+      triggerToast(error || "Unable to delete contact message.", "error");
+      return;
+    }
+
+    triggerToast("Contact inquiry deleted.");
+    setContactMessagesState((prev) => prev.filter((msg) => msg.id !== messageId));
+  };
+
   const handleExportCSV = () => {
     if (filteredCandidates.length === 0) {
       triggerToast("No records to export", "error");
@@ -116,11 +132,11 @@ const Dashboard = () => {
   };
 
   // Extract unique locations and qualifications for filters
-  const uniqueQualifications = Array.from(new Set(candidates.map((c) => c.qualification).filter(Boolean)));
-  const uniqueJoiningTimelines = Array.from(new Set(candidates.map((c) => c.joiningTimeline).filter(Boolean)));
+  const uniqueQualifications = Array.from(new Set(candidatesState.map((c) => c.qualification).filter(Boolean)));
+  const uniqueJoiningTimelines = Array.from(new Set(candidatesState.map((c) => c.joiningTimeline).filter(Boolean)));
 
   // Filter & Search Candidates
-  const filteredCandidates = candidates.filter((cand) => {
+  const filteredCandidates = candidatesState.filter((cand) => {
     const nameMatch = cand.fullName?.toLowerCase().includes(searchTerm.toLowerCase());
     const phoneMatch = cand.phone?.includes(searchTerm);
     const emailMatch = cand.email?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -147,7 +163,7 @@ const Dashboard = () => {
   });
 
   // New unread candidates count (status === "New")
-  const newCandidatesCount = candidates.filter((c) => c.status === "New" || !c.status).length;
+  const newCandidatesCount = candidatesState.filter((c) => c.status === "New" || !c.status).length;
 
   return (
     <div className="py-8">
@@ -179,7 +195,7 @@ const Dashboard = () => {
           <NotificationBadge count={newCandidatesCount} />
           
           <button
-            onClick={() => loadCandidatesData(true)}
+            onClick={handleRefresh}
             disabled={refreshing}
             className="bg-white border border-slate-200 text-slate-600 hover:text-navy-800 hover:bg-slate-50 p-2.5 rounded-lg shadow-sm transition disabled:opacity-50"
             title="Refresh database records"
@@ -190,7 +206,7 @@ const Dashboard = () => {
       </div>
 
       {/* Analytics Cards */}
-      {!loading && <AnalyticsCards candidates={candidates} />}
+      {!loading && <AnalyticsCards candidates={candidatesState} />}
 
       {/* Search and Filter Panel */}
       <div className="bg-white rounded-xl border border-slate-100 shadow-xs p-5 mb-8">
@@ -339,6 +355,7 @@ const Dashboard = () => {
                     key={cand.id}
                     candidate={cand}
                     onStatusChange={handleStatusChange}
+                    onDeleteCandidate={handleDeleteCandidate}
                     userProfile={userProfile}
                   />
                 ))
@@ -355,7 +372,7 @@ const Dashboard = () => {
             <h2 className="text-lg font-bold text-navy-800">Contact Form Inquiries</h2>
             <p className="text-sm text-slate-500">Messages submitted through the public contact form.</p>
           </div>
-          <span className="text-xs font-semibold text-slate-600">{contactMessages.length} message{contactMessages.length === 1 ? "" : "s"}</span>
+          <span className="text-xs font-semibold text-slate-600">{contactMessagesState.length} message{contactMessagesState.length === 1 ? "" : "s"}</span>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-100">
@@ -366,23 +383,32 @@ const Dashboard = () => {
                 <th className="px-6 py-4">Phone</th>
                 <th className="px-6 py-4">Message</th>
                 <th className="px-6 py-4">Submitted</th>
+                <th className="px-6 py-4">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {contactMessages.length === 0 ? (
+              {contactMessagesState.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan="6" className="px-6 py-12 text-center text-slate-500">
                     No contact inquiries found.
                   </td>
                 </tr>
               ) : (
-                contactMessages.map((message) => (
+                contactMessagesState.map((message) => (
                   <tr key={message.id || message.timestamp}>
                     <td className="px-6 py-4 text-sm font-medium text-slate-900">{message.name}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{message.email}</td>
                     <td className="px-6 py-4 text-sm text-slate-600 font-mono">{message.phone || "-"}</td>
                     <td className="px-6 py-4 text-sm text-slate-600 max-w-md break-words">{message.message}</td>
                     <td className="px-6 py-4 text-sm text-slate-500">{message.timestamp ? new Date(message.timestamp).toLocaleString() : "-"}</td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => handleDeleteContact(message.id)}
+                        className="inline-flex items-center justify-center rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition"
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}

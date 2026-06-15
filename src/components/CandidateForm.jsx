@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { checkDuplicateCandidate, addCandidate } from "../firebase/firestore";
+import { applyToJob } from "../firebase/jobs";
 import { uploadResume } from "../firebase/storage";
 import { sendNewApplicationEmail } from "../utils/emailService";
 import { CheckCircle2, Upload, AlertCircle, FileText } from "lucide-react";
 
-const CandidateForm = () => {
+const CandidateForm = ({ jobId, jobTitle }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     fatherName: "",
@@ -232,8 +233,23 @@ const CandidateForm = () => {
         throw new Error(`Failed to save candidate: ${candidateSaveRes.error}`);
       }
 
+      if (jobId) {
+        const applicationPayload = {
+          candidate_id: candidateId,
+          candidate_name: candidatePayload.fullName,
+          email: candidatePayload.email,
+          phone: candidatePayload.phone,
+          qualification: candidatePayload.qualification,
+          experience: candidatePayload.experience
+        };
+        const applyRes = await applyToJob(jobId, applicationPayload);
+        if (applyRes.error) {
+          throw new Error(`Failed to submit job application: ${applyRes.error}`);
+        }
+      }
+
       // 3. Trigger EmailJS recruiter notification
-      const fullCandidateData = { ...candidatePayload, resumeURL: null };
+      const fullCandidateData = { ...candidatePayload, resumeURL: null, jobTitle };
       await sendNewApplicationEmail(fullCandidateData);
 
       // Successful Submission
@@ -283,7 +299,7 @@ const CandidateForm = () => {
           onClick={() => setFormStatus({ submitting: false, success: false, error: "" })}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg shadow-sm transition"
         >
-          Submit Another Profile
+          {jobTitle ? "Submit Another Profile" : "Submit Another Profile"}
         </button>
       </div>
     );
@@ -294,6 +310,12 @@ const CandidateForm = () => {
       <div className="mb-8 border-b border-slate-100 pb-5">
         <h2 className="text-2xl font-extrabold text-navy-800">Job Application Form</h2>
         <p className="text-slate-500 text-sm mt-1">Please provide accurate information. Fields marked with * are required.</p>
+        {jobTitle && (
+          <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Applying For</p>
+            <h3 className="mt-1 text-lg font-semibold text-navy-800">{jobTitle}</h3>
+          </div>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

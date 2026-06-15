@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 // Pages
 import Home from "./pages/Home";
 import Apply from "./pages/Apply";
+import Jobs from "./pages/Jobs";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
@@ -52,6 +53,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/apply" element={<Apply />} />
+              <Route path="/apply/:jobId" element={<Apply />} />
+              <Route path="/jobs" element={<Jobs />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin" element={<Admin />} />

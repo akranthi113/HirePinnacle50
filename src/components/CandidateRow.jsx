@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Copy, Check, FileDown, Eye, X } from "lucide-react";
+import { Copy, Check, FileDown, Eye, X, Trash2 } from "lucide-react";
 
-const CandidateRow = ({ candidate, onStatusChange, userProfile }) => {
+const CandidateRow = ({ candidate, onStatusChange, onDeleteCandidate, userProfile }) => {
   const [copied, setCopied] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
@@ -149,6 +149,16 @@ How often will you be able to join? ${candidate.joiningTimeline || ""}`;
             <span className="p-1.5 rounded border bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" title="No Resume Uploaded">
               <FileDown className="w-4 h-4" />
             </span>
+          )}
+
+          {onDeleteCandidate && (
+            <button
+              onClick={() => onDeleteCandidate(candidate.id)}
+              className="p-1.5 rounded border bg-white text-rose-500 border-rose-200 hover:text-rose-700 hover:bg-rose-50 transition"
+              title="Delete Candidate Record"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
           )}
         </td>
       </tr>

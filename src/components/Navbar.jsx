@@ -80,6 +80,8 @@ const Navbar = () => {
     { label: "Contact", id: "contact" }
   ];
 
+  const isJobsRoute = location.pathname === "/jobs";
+
   return (
     <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,6 +109,14 @@ const Navbar = () => {
                 {item.label}
               </button>
             ))}
+            <Link
+              to="/jobs"
+              className={`text-sm font-medium transition-colors hover:text-navy-800 py-1 ${
+                isJobsRoute ? "text-navy-800 border-b-2 border-navy-800" : "text-slate-600"
+              }`}
+            >
+              Jobs
+            </Link>
           </div>
 
           {/* CTA / Auth Actions */}
@@ -175,6 +185,13 @@ const Navbar = () => {
             </button>
           ))}
           <div className="pt-4 pb-2 border-t border-slate-100 flex flex-col space-y-2 px-3">
+            <Link
+              to="/jobs"
+              onClick={() => setIsOpen(false)}
+              className="bg-slate-100 text-slate-700 text-center font-semibold py-2.5 rounded-md hover:bg-slate-200"
+            >
+              Browse Jobs
+            </Link>
             <Link
               to="/apply"
               onClick={() => setIsOpen(false)}
