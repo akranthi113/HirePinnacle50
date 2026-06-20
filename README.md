@@ -106,6 +106,7 @@ src/
 | Start dev | `npm run dev` |
 | Build | `npm run build` |
 | Push to GitHub | `push_to_main.bat` |
+| Push fixes | `git push origin main` |
 | Start local | `start_local.bat` |
 
 ## Support
