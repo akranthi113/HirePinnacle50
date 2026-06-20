@@ -10,52 +10,55 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-brand-darker text-slate-300 border-t border-white/5 relative overflow-hidden">
+      {/* Decorative gradient blob */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-brand-primary to-transparent opacity-50"></div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Logo & Tagline */}
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="text-2xl font-bold text-white tracking-tight flex items-center">
-              <span className="bg-blue-600 text-white px-2.5 py-1 rounded-md mr-1.5 font-extrabold text-sm tracking-wider">Hire</span>
-              <span>Pinnacle50</span>
+              <span className="text-brand-primary mr-1">❖</span>
+              <span>Place</span>
+              <span className="text-brand-accent">IO</span>
             </Link>
-            <p className="mt-4 text-slate-400 max-w-sm text-sm leading-relaxed">
-              Connecting Talent with Opportunity. HirePinnacle50 is a professional recruitment 
-              and staffing solutions partner committed to accelerating your career or business growth.
+            <p className="mt-6 text-slate-400 max-w-sm text-sm leading-relaxed">
+              Connecting top talent with extraordinary opportunities. PlaceIO is your intelligent partner for modern recruitment and career advancement.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white text-sm font-semibold tracking-wider uppercase mb-4">Quick Links</h3>
-            <ul className="space-y-2.5 text-sm">
+            <h3 className="text-white text-sm font-semibold tracking-wider uppercase mb-6">Explore</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <button onClick={() => handleNavClick("home")} className="hover:text-white transition">Home</button>
+                <button onClick={() => handleNavClick("home")} className="text-slate-400 hover:text-brand-primary transition">Home</button>
               </li>
               <li>
-                <button onClick={() => handleNavClick("about")} className="hover:text-white transition">About Us</button>
+                <button onClick={() => handleNavClick("about")} className="text-slate-400 hover:text-brand-primary transition">About Us</button>
               </li>
               <li>
-                <button onClick={() => handleNavClick("services")} className="hover:text-white transition">Services</button>
+                <button onClick={() => handleNavClick("services")} className="text-slate-400 hover:text-brand-primary transition">Services</button>
               </li>
               <li>
-                <Link to="/apply" className="hover:text-white transition">Apply for Jobs</Link>
+                <Link to="/apply" className="text-slate-400 hover:text-brand-primary transition">Apply for Jobs</Link>
               </li>
               <li>
-                <Link to="/login" className="hover:text-white transition">Recruiter Login</Link>
+                <Link to="/login" className="text-slate-400 hover:text-brand-primary transition">Recruiter Login</Link>
               </li>
             </ul>
           </div>
 
           {/* Socials & Connect */}
           <div>
-            <h3 className="text-white text-sm font-semibold tracking-wider uppercase mb-4">Connect With Us</h3>
-            <div className="flex space-x-4 mb-5">
+            <h3 className="text-white text-sm font-semibold tracking-wider uppercase mb-6">Connect</h3>
+            <div className="flex space-x-4 mb-8">
               <a 
                 href="https://linkedin.com" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-full transition text-slate-400 hover:text-white"
+                className="bg-white/5 hover:bg-brand-primary/20 p-3 rounded-xl transition-all duration-300 text-slate-400 hover:text-brand-primary border border-white/5 hover:border-brand-primary/30"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
@@ -64,7 +67,7 @@ const Footer = () => {
                 href="https://wa.me/919999999999" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-full transition text-slate-400 hover:text-white"
+                className="bg-white/5 hover:bg-brand-accent/20 p-3 rounded-xl transition-all duration-300 text-slate-400 hover:text-brand-accent border border-white/5 hover:border-brand-accent/30"
                 aria-label="WhatsApp"
               >
                 <MessageSquare className="w-5 h-5" />
@@ -73,21 +76,21 @@ const Footer = () => {
                 href="https://instagram.com" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-full transition text-slate-400 hover:text-white"
+                className="bg-white/5 hover:bg-pink-500/20 p-3 rounded-xl transition-all duration-300 text-slate-400 hover:text-pink-500 border border-white/5 hover:border-pink-500/30"
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
             <p className="text-xs text-slate-500">
-              <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link> | <span className="cursor-pointer hover:underline" onClick={() => handleNavClick("contact")}>Contact Support</span>
+              <Link to="/privacy-policy" className="hover:text-slate-300 transition">Privacy Policy</Link> | <span className="cursor-pointer hover:text-slate-300 transition" onClick={() => handleNavClick("contact")}>Contact Support</span>
             </p>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
-          <p>© 2025 HirePinnacle50. All Rights Reserved.</p>
-          <p className="mt-2 md:mt-0">Recruitment & Staffing Platform</p>
+        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} PlaceIO. All Rights Reserved.</p>
+          <p className="mt-2 md:mt-0">Smart Placement & Recruitment</p>
         </div>
       </div>
     </footer>

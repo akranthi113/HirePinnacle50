@@ -4,36 +4,37 @@ import { Target, Zap, ShieldCheck } from "lucide-react";
 const AboutSection = () => {
   const cards = [
     {
-      icon: <Target className="w-8 h-8 text-blue-600" />,
-      title: "Targeted Hiring",
-      description: "We match the right candidate to the right role with precision, understanding unique job requirements and cultural fits."
+      icon: <Target className="w-8 h-8 text-brand-primary" />,
+      title: "Precision Matching",
+      description: "Our algorithms and expert curators ensure candidates perfectly align with your technical requirements and culture."
     },
     {
-      icon: <Zap className="w-8 h-8 text-amber-500" />,
-      title: "Fast Process",
-      description: "From application submission to coordinating interviews, our system streamlines the path in days, not weeks."
+      icon: <Zap className="w-8 h-8 text-amber-400" />,
+      title: "Accelerated Hiring",
+      description: "Streamlined pipelines cut time-to-hire by 40%. Go from application to offer in days, not months."
     },
     {
-      icon: <ShieldCheck className="w-8 h-8 text-emerald-500" />,
-      title: "Secure & Confidential",
-      description: "Your personal details and resumes are safely encrypted, protecting candidate privacy and company security protocols."
+      icon: <ShieldCheck className="w-8 h-8 text-brand-accent" />,
+      title: "Enterprise Security",
+      description: "Bank-grade encryption protects candidate data and proprietary company information at every step."
     }
   ];
 
   return (
-    <section id="about" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-darker via-brand-dark to-brand-darker z-0"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Who We Are</h2>
-          <p className="mt-2 text-3xl font-extrabold text-navy-800 sm:text-4xl">
-            About HirePinnacle50
-          </p>
-          <div className="mt-4 h-1.5 w-16 bg-blue-600 mx-auto rounded-full"></div>
-          <p className="mt-6 text-lg text-slate-600 leading-relaxed font-light">
-            HirePinnacle50 is a professional recruitment and staffing solutions company. 
-            We specialize in identifying, evaluating, and placing top talent across industries. 
-            Our technology-driven platform ensures a seamless experience for both candidates and recruiters.
+        <div className="text-center max-w-3xl mx-auto mb-20 animate-fade-in">
+          <div className="inline-flex items-center space-x-2 bg-brand-primary/10 border border-brand-primary/20 rounded-full px-4 py-1.5 mb-6 text-sm text-brand-primary font-medium tracking-wide">
+            <span>Discover PlaceIO</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
+            Redefining Talent Acquisition
+          </h2>
+          <p className="text-lg md:text-xl text-slate-400 leading-relaxed font-light">
+            PlaceIO is more than a recruitment platform. It's an intelligent ecosystem designed to connect visionary companies with the top 1% of global talent through data-driven matching.
           </p>
         </div>
 
@@ -42,13 +43,18 @@ const AboutSection = () => {
           {cards.map((card, idx) => (
             <div 
               key={idx}
-              className="bg-slate-50 border border-slate-100 rounded-xl p-8 hover:shadow-md transition-all duration-200 hover:-translate-y-1"
+              className="glassmorphism glassmorphism-hover rounded-2xl p-8 relative overflow-hidden group"
             >
-              <div className="bg-white rounded-lg p-3 w-14 h-14 flex items-center justify-center shadow-sm border border-slate-100 mb-6">
-                {card.icon}
+              {/* Decorative background glow on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="relative z-10">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 w-16 h-16 flex items-center justify-center shadow-lg mb-8 group-hover:scale-110 transition-transform duration-300">
+                  {card.icon}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4 tracking-wide">{card.title}</h3>
+                <p className="text-slate-400 text-base leading-relaxed font-light">{card.description}</p>
               </div>
-              <h3 className="text-xl font-bold text-navy-800 mb-3">{card.title}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{card.description}</p>
             </div>
           ))}
         </div>

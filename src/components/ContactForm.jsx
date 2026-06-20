@@ -61,7 +61,7 @@ const ContactForm = () => {
               <div className="mt-4 h-1.5 w-12 bg-blue-600 rounded-full mb-8"></div>
               <p className="text-slate-600 leading-relaxed font-light mb-8">
                 Have open roles or looking for a custom staffing solution? Or perhaps you have a career query? 
-                Reach out to us and our HirePinnacle50 recruiters will get back to you shortly.
+                Reach out to us and our PlaceIO recruiters will get back to you shortly.
               </p>
             </div>
 
@@ -74,7 +74,7 @@ const ContactForm = () => {
                 <div>
                   <h4 className="text-sm font-bold text-navy-800 uppercase tracking-wider">Email Us</h4>
                   <p className="text-blue-600 text-sm hover:underline mt-0.5">
-                    <a href="mailto:contact@hirepinnacle50.com">contact@hirepinnacle50.com</a>
+                    <a href="mailto:contact@placeio.com">contact@placeio.com</a>
                   </p>
                 </div>
               </div>
@@ -96,7 +96,7 @@ const ContactForm = () => {
                 <div>
                   <h4 className="text-sm font-bold text-navy-800 uppercase tracking-wider">Our Office</h4>
                   <p className="text-slate-600 text-sm mt-0.5 leading-relaxed">
-                    HirePinnacle50, 4th Block, Koramangala,<br />
+                    PlaceIO, 4th Block, Koramangala,<br />
                     Bangalore, Karnataka 560034, India
                   </p>
                 </div>

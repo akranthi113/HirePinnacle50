@@ -22,32 +22,32 @@ const AnalyticsCards = ({ candidates }) => {
     {
       label: "Total Candidates",
       value: total,
-      icon: <Users className="w-5 h-5 text-blue-600" />,
-      bg: "bg-blue-50 border-blue-100"
+      icon: <Users className="w-5 h-5 text-blue-400" />,
+      bg: "bg-blue-500/10 border-blue-500/20"
     },
     {
       label: "New This Week",
       value: newThisWeek,
-      icon: <UserPlus className="w-5 h-5 text-amber-600" />,
-      bg: "bg-amber-50 border-amber-100"
+      icon: <UserPlus className="w-5 h-5 text-amber-400" />,
+      bg: "bg-amber-500/10 border-amber-500/20"
     },
     {
-      label: "Interviews Scheduled",
+      label: "Interviews",
       value: interviews,
-      icon: <Calendar className="w-5 h-5 text-indigo-600" />,
-      bg: "bg-indigo-50 border-indigo-100"
+      icon: <Calendar className="w-5 h-5 text-indigo-400" />,
+      bg: "bg-indigo-500/10 border-indigo-500/20"
     },
     {
-      label: "Selected Candidates",
+      label: "Selected",
       value: selected,
-      icon: <CheckCircle className="w-5 h-5 text-emerald-600" />,
-      bg: "bg-emerald-50 border-emerald-100"
+      icon: <CheckCircle className="w-5 h-5 text-brand-accent" />,
+      bg: "bg-emerald-500/10 border-emerald-500/20"
     },
     {
       label: "Conversion Rate",
       value: `${conversionRate}%`,
-      icon: <Percent className="w-5 h-5 text-violet-600" />,
-      bg: "bg-violet-50 border-violet-100"
+      icon: <Percent className="w-5 h-5 text-purple-400" />,
+      bg: "bg-purple-500/10 border-purple-500/20"
     }
   ];
 
@@ -56,13 +56,13 @@ const AnalyticsCards = ({ candidates }) => {
       {stats.map((stat, idx) => (
         <div 
           key={idx}
-          className={`bg-white border rounded-xl p-5 shadow-xs flex items-center justify-between hover:shadow-sm transition-all duration-200`}
+          className={`glassmorphism glassmorphism-hover rounded-xl p-5 flex items-center justify-between group`}
         >
           <div>
-            <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">{stat.label}</p>
-            <p className="text-2xl font-extrabold text-navy-800 mt-1">{stat.value}</p>
+            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">{stat.label}</p>
+            <p className="text-3xl font-extrabold text-white mt-2 group-hover:text-brand-primary transition-colors">{stat.value}</p>
           </div>
-          <div className={`${stat.bg} border rounded-lg p-2.5 flex items-center justify-center`}>
+          <div className={`${stat.bg} border rounded-xl p-3 flex items-center justify-center group-hover:scale-110 transition-transform`}>
             {stat.icon}
           </div>
         </div>

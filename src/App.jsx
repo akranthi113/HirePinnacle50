@@ -20,7 +20,7 @@ const PrivacyPolicy = () => (
 
       <div className="space-y-6 text-sm text-slate-600 leading-relaxed font-light">
         <p>
-          HirePinnacle50 respects your privacy and is committed to protecting the personal data you share with us. This policy describes how we collect, store, and process candidate profiles and resumes.
+          PlaceIO respects your privacy and is committed to protecting the personal data you share with us. This policy describes how we collect, store, and process candidate profiles and resumes.
         </p>
 
         <h3 className="text-base font-bold text-navy-800 uppercase mt-4 tracking-wider">1. Information We Collect</h3>
@@ -44,7 +44,7 @@ const PrivacyPolicy = () => (
 
 function App() {
   return (
-    <Router basename="/HirePinnacle50">
+    <Router basename="/placeio">
       <AuthProvider>
         <div className="flex flex-col min-h-screen bg-slate-50">
           <Navbar />

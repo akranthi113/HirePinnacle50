@@ -1,5 +1,5 @@
 ╔══════════════════════════════════════════════════════════════════╗
-║                   HirePinnacle50 Batch Files Guide               ║
+║                   PlaceIO Batch Files Guide                      ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 QUICK START (Choose One):
@@ -79,7 +79,7 @@ If batch files don't work, use Command Prompt:
 
    1. Press Windows + R
    2. Type: cmd
-   3. Navigate to project: cd Desktop\playground\Hirepinnacle50
+   3. Navigate to project: cd Desktop\playground\placeio
    4. Run commands:
       - npm install
       - npm run dev

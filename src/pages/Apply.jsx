@@ -30,7 +30,7 @@ const Apply = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <h1 className="text-3xl font-extrabold text-navy-800 tracking-tight sm:text-4xl">
-            Join the HirePinnacle50 Talent Network
+            Join the PlaceIO Talent Network
           </h1>
           <p className="mt-4 text-slate-500 text-sm leading-relaxed max-w-xl mx-auto font-light">
             Fill in the details below and upload your resume. Our recruiter panel will match you 

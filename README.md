@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-# HirePinnacle50
+# PlaceIO
 
-A React + Vite recruitment platform for hiring candidates efficiently using Supabase backend.
+A modern React + Vite recruitment platform for connecting top talent with opportunities efficiently using a Supabase backend.
 
 ## Tech Stack
 
@@ -68,7 +67,7 @@ git push origin main
 - Choose `main` branch and `/docs` folder
 - Save
 
-**Your site will be live at**: `https://akranthi113.github.io/HirePinnacle50/`
+**Your site will be live at**: `https://akranthi113.github.io/placeio/`
 
 ## Project Structure
 
@@ -93,7 +92,7 @@ src/
 **Blank page after deployment?**
 - Check browser console (F12) for errors
 - Verify `.env` Supabase credentials
-- Ensure `vite.config.js` has `base: "/HirePinnacle50/"`
+- Ensure `vite.config.js` has `base: "/placeio/"`
 
 **Local dev not working?**
 - Run `npm install` first
@@ -115,6 +114,3 @@ For issues, check:
 1. Browser console for errors
 2. Supabase connection status
 3. Environment variables in `.env`
-=======
-# HirePinnacle50
->>>>>>> c61e551d8d27476299206aeb7c5800db6b5e8093

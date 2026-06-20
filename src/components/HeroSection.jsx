@@ -1,64 +1,70 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Briefcase } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 const HeroSection = ({ onLearnMoreClick }) => {
   return (
-    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-hero-pattern">
-      {/* Decorative background shapes */}
-      <div className="absolute inset-0 z-0 opacity-20">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-indigo-500 rounded-full filter blur-2xl"></div>
+    <section id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-hero-pattern min-h-screen flex items-center">
+      
+      {/* Animated geometric background elements */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-primary/20 rounded-full filter blur-[100px] animate-pulse-glow mix-blend-screen"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-brand-accent/20 rounded-full filter blur-[100px] animate-pulse-glow mix-blend-screen" style={{ animationDelay: '1s' }}></div>
       </div>
       
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <div className="inline-flex items-center space-x-2 bg-blue-900/40 border border-blue-700/50 rounded-full px-3 py-1 mb-6 text-xs sm:text-sm text-blue-200">
-          <Briefcase className="w-4 h-4 text-blue-400" />
-          <span>Empowering Careers & Staffing Excellence</span>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white w-full">
+        <div className="animate-fade-in inline-flex items-center space-x-2 glassmorphism rounded-full px-4 py-2 mb-8 text-xs sm:text-sm text-slate-200 border border-white/10 shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+          <Sparkles className="w-4 h-4 text-brand-accent animate-pulse" />
+          <span className="font-medium tracking-wide uppercase text-[11px]">The Future of Smart Placement</span>
         </div>
         
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-none mb-6">
-          Find the Right Talent, <span className="text-blue-400">Faster.</span>
+        <h1 className="animate-slide-up text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] mb-8">
+          Accelerate your <br className="hidden sm:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-blue-400 to-brand-accent">
+            career growth.
+          </span>
         </h1>
         
-        <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-slate-300 mb-10 leading-relaxed font-light">
-          HirePinnacle50 connects skilled professionals with the right opportunities 
-          through a smart, streamlined recruitment process.
+        <p className="animate-slide-up max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 mb-12 leading-relaxed font-light" style={{ animationDelay: '0.1s' }}>
+          PlaceIO bridges the gap between extraordinary talent and world-class opportunities through our intelligent, data-driven recruitment ecosystem.
         </p>
         
-        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="animate-slide-up flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6" style={{ animationDelay: '0.2s' }}>
           <Link
             to="/apply"
-            className="w-full sm:w-auto flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-150 group text-base"
+            className="w-full sm:w-auto flex items-center justify-center btn-primary text-lg px-8 py-4 shadow-[0_0_30px_rgba(59,130,246,0.4)]"
           >
-            Apply for a Job
-            <ArrowRight className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" />
+            Find Opportunities
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
           </Link>
           <button
             onClick={onLearnMoreClick}
-            className="w-full sm:w-auto border border-slate-400 hover:border-white text-slate-200 hover:text-white hover:bg-white/5 font-semibold px-8 py-3.5 rounded-lg transition text-base"
+            className="w-full sm:w-auto glassmorphism hover:bg-white/10 text-white font-medium px-8 py-4 rounded-lg transition-all duration-300 text-lg border border-white/20"
           >
-            Learn More
+            Hire Talent
           </button>
         </div>
 
         {/* Floating statistics preview */}
-        <div className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto border-t border-slate-700/50 pt-10">
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-blue-400">500+</p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Placed Candidates</p>
+        <div className="animate-slide-up mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto glassmorphism rounded-2xl p-8 border border-white/10 relative overflow-hidden" style={{ animationDelay: '0.3s' }}>
+          {/* Subtle inner glow */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+          
+          <div className="relative z-10">
+            <p className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-brand-primary to-blue-300">5k+</p>
+            <p className="text-xs text-slate-400 mt-2 uppercase tracking-widest font-semibold">Placements</p>
           </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-blue-400">50+</p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Hiring Partners</p>
+          <div className="relative z-10">
+            <p className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-brand-accent to-emerald-300">200+</p>
+            <p className="text-xs text-slate-400 mt-2 uppercase tracking-widest font-semibold">Partners</p>
           </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-blue-400">10+</p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Industries Served</p>
+          <div className="relative z-10">
+            <p className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-brand-primary to-blue-300">98%</p>
+            <p className="text-xs text-slate-400 mt-2 uppercase tracking-widest font-semibold">Success Rate</p>
           </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-blue-400">95%</p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Client Satisfaction</p>
+          <div className="relative z-10">
+            <p className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-brand-accent to-emerald-300">24/7</p>
+            <p className="text-xs text-slate-400 mt-2 uppercase tracking-widest font-semibold">Support</p>
           </div>
         </div>
       </div>

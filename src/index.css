@@ -7,35 +7,59 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-brand-darker text-slate-200 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 .bg-hero-pattern {
-  background: radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 1) 0%, rgba(30, 27, 75, 1) 90%);
+  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.15), transparent 40%),
+              #020617;
 }
 
 .glassmorphism {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-.glassmorphism-dark {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.glassmorphism-hover {
+  transition: all 0.3s ease;
+}
+
+.glassmorphism-hover:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 /* Custom transitions and scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
+  @apply bg-brand-darker;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full hover:bg-slate-400;
+  @apply bg-slate-700 rounded-full hover:bg-slate-500;
+}
+
+/* Base button animations */
+.btn-primary {
+  @apply bg-brand-primary text-white font-medium rounded-lg px-6 py-2 transition-all duration-300;
+}
+.btn-primary:hover {
+  @apply bg-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.6)] transform -translate-y-0.5;
+}
+
+.btn-accent {
+  @apply bg-brand-accent text-white font-medium rounded-lg px-6 py-2 transition-all duration-300;
+}
+.btn-accent:hover {
+  @apply bg-brand-accentHover shadow-[0_0_15px_rgba(16,185,129,0.6)] transform -translate-y-0.5;
 }

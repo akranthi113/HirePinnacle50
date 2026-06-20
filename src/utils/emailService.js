@@ -17,7 +17,7 @@ const isEmailJSConfigured = () => {
  */
 export const sendNewApplicationEmail = async (candidateData) => {
   const templateParams = {
-    recruiter_email: "contact@hirepinnacle50.com",
+    recruiter_email: "contact@placeio.com",
     candidate_name: candidateData.fullName,
     candidate_email: candidateData.email,
     candidate_phone: candidateData.phone,
@@ -29,7 +29,7 @@ export const sendNewApplicationEmail = async (candidateData) => {
 
   if (!isEmailJSConfigured()) {
     console.log("%c[MOCK EMAIL] New candidate applied! Notification sent to Recruiter:", "color: #1e3a8a; font-weight: bold;", {
-      to: "contact@hirepinnacle50.com",
+      to: "contact@placeio.com",
       subject: `New Candidate Application: ${candidateData.fullName}`,
       details: templateParams
     });
@@ -70,7 +70,7 @@ export const sendCandidateStatusEmail = async (candidateEmail, candidateName, ne
     candidate_email: candidateEmail,
     candidate_name: candidateName,
     status: newStatus,
-    company_name: "HirePinnacle50",
+    company_name: "PlaceIO",
     message: newStatus === "Interview" 
       ? `Great news! Your profile has been shortlisted and we would like to coordinate an interview with you. Our recruitment team will reach out shortly to schedule a date and time.`
       : `Congratulations! We are pleased to inform you that you have been selected for the position. Our onboarding team will connect with you to discuss the final placement and onboarding details.`
@@ -79,7 +79,7 @@ export const sendCandidateStatusEmail = async (candidateEmail, candidateName, ne
   if (!isEmailJSConfigured()) {
     console.log(`%c[MOCK EMAIL] Candidate Status Updated to ${newStatus}! Notification sent to Candidate:`, "color: green; font-weight: bold;", {
       to: candidateEmail,
-      subject: `Application Update: ${newStatus} - HirePinnacle50`,
+      subject: `Application Update: ${newStatus} - PlaceIO`,
       details: templateParams
     });
     return { success: true, isMock: true };

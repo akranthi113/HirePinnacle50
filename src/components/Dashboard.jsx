@@ -166,41 +166,41 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
   const newCandidatesCount = candidatesState.filter((c) => c.status === "New" || !c.status).length;
 
   return (
-    <div className="py-8">
+    <div className="py-4">
       {/* Toast Notification */}
       {toast.show && (
-        <div className={`fixed bottom-5 right-5 z-50 flex items-center p-4 rounded-xl shadow-lg border transition-all duration-300 ${
+        <div className={`fixed bottom-5 right-5 z-50 flex items-center p-4 rounded-xl shadow-2xl border transition-all duration-300 backdrop-blur-md ${
           toast.type === "error" 
-            ? "bg-rose-50 border-rose-100 text-rose-800" 
-            : "bg-emerald-50 border-emerald-100 text-emerald-800"
+            ? "bg-rose-900/80 border-rose-500/50 text-rose-200" 
+            : "bg-emerald-900/80 border-emerald-500/50 text-emerald-200"
         }`}>
           {toast.type === "error" ? (
-            <AlertCircle className="w-5 h-5 text-rose-500 mr-2 flex-shrink-0" />
+            <AlertCircle className="w-5 h-5 text-rose-400 mr-3 flex-shrink-0" />
           ) : (
-            <CheckCircle className="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0" />
+            <CheckCircle className="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0" />
           )}
-          <span className="text-sm font-semibold">{toast.message}</span>
+          <span className="text-sm font-semibold tracking-wide">{toast.message}</span>
         </div>
       )}
 
       {/* Header Panel */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 pb-5 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 pb-6 border-b border-white/10">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-800 tracking-tight">Recruiter Dashboard</h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Welcome back, <span className="font-semibold text-slate-800">{userProfile?.displayName || currentUser?.email}</span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Recruiter Dashboard</h1>
+          <p className="text-slate-400 text-sm mt-2 font-light">
+            Welcome back, <span className="font-semibold text-white">{userProfile?.displayName || currentUser?.email}</span>
           </p>
         </div>
-        <div className="flex items-center space-x-3 mt-4 sm:mt-0">
+        <div className="flex items-center space-x-4 mt-6 sm:mt-0">
           <NotificationBadge count={newCandidatesCount} />
           
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="bg-white border border-slate-200 text-slate-600 hover:text-navy-800 hover:bg-slate-50 p-2.5 rounded-lg shadow-sm transition disabled:opacity-50"
+            className="glassmorphism border border-white/10 text-slate-300 hover:text-brand-primary hover:bg-white/10 p-3 rounded-xl shadow-lg transition-all disabled:opacity-50"
             title="Refresh database records"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`} />
           </button>
         </div>
       </div>
@@ -209,19 +209,19 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
       {!loading && <AnalyticsCards candidates={candidatesState} />}
 
       {/* Search and Filter Panel */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-xs p-5 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="glassmorphism rounded-2xl border border-white/10 p-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
           {/* Real-time search */}
-          <div className="md:col-span-4 relative">
-            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
-              <Search className="w-4 h-4" />
+          <div className="md:col-span-4 relative group">
+            <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-500 group-focus-within:text-brand-primary transition-colors pointer-events-none">
+              <Search className="w-5 h-5" />
             </span>
             <input
               type="text"
               placeholder="Search by name, phone, or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              className="w-full bg-brand-darker/50 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition"
             />
           </div>
 
@@ -230,11 +230,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedQualification}
               onChange={(e) => setSelectedQualification(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition"
+              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="">Qualification</option>
+              <option value="" className="bg-brand-dark text-white">Qualification</option>
               {uniqueQualifications.map((q) => (
-                <option key={q} value={q}>{q}</option>
+                <option key={q} value={q} className="bg-brand-dark text-white">{q}</option>
               ))}
             </select>
           </div>
@@ -244,11 +244,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedExperience}
               onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition"
+              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="">Experience</option>
+              <option value="" className="bg-brand-dark text-white">Experience</option>
               {["Fresher", "1 Year", "2 Years", "3 Years", "4 Years", "5+ Years"].map((exp) => (
-                <option key={exp} value={exp}>{exp}</option>
+                <option key={exp} value={exp} className="bg-brand-dark text-white">{exp}</option>
               ))}
             </select>
           </div>
@@ -258,11 +258,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedJoiningTimeline}
               onChange={(e) => setSelectedJoiningTimeline(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition"
+              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="">Joining Timeline</option>
+              <option value="" className="bg-brand-dark text-white">Join Timeline</option>
               {uniqueJoiningTimelines.map((jt) => (
-                <option key={jt} value={jt}>{jt}</option>
+                <option key={jt} value={jt} className="bg-brand-dark text-white">{jt}</option>
               ))}
             </select>
           </div>
@@ -272,23 +272,23 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white transition"
+              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="">Status</option>
+              <option value="" className="bg-brand-dark text-white">Status</option>
               {["New", "Contacted", "Interview", "Selected", "Rejected", "On Hold"].map((st) => (
-                <option key={st} value={st}>{st}</option>
+                <option key={st} value={st} className="bg-brand-dark text-white">{st}</option>
               ))}
             </select>
           </div>
         </div>
 
         {/* Sorting & Export controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mt-5 pt-4 border-t border-slate-100 gap-4">
-          <div className="flex items-center space-x-2.5">
-            <span className="text-xs font-semibold text-slate-500">Sort:</span>
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-6 pt-5 border-t border-white/10 gap-5">
+          <div className="flex items-center space-x-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Sort By:</span>
             <button
               onClick={() => setSortOrder(sortOrder === "latest" ? "oldest" : "latest")}
-              className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-semibold transition"
+              className="text-xs bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg font-semibold transition border border-white/10 tracking-wide"
             >
               {sortOrder === "latest" ? "Latest First" : "Oldest First"}
             </button>
@@ -296,56 +296,56 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
 
           <button
             onClick={handleExportCSV}
-            className="flex items-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-lg shadow-xs hover:shadow transition"
+            className="flex items-center bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-bold text-xs px-5 py-2.5 rounded-lg shadow-lg hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition"
           >
-            <Download className="w-3.5 h-3.5 mr-1.5" />
+            <Download className="w-4 h-4 mr-2" />
             Bulk CSV Export ({filteredCandidates.length})
           </button>
         </div>
       </div>
 
       {/* Candidate Records Table */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-xs overflow-hidden">
+      <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden mb-12">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-100">
-            <thead className="bg-slate-50 text-left text-xs font-bold text-slate-500 uppercase tracking-wider select-none">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/5 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
               <tr>
-                <th className="px-6 py-4">Candidate Name</th>
-                <th className="px-6 py-4">Phone</th>
-                <th className="px-6 py-4">Email</th>
-                <th className="px-6 py-4">Qual.</th>
-                <th className="px-6 py-4">Exp.</th>
-                <th className="px-6 py-4">Join Timeline</th>
-                <th className="px-6 py-4">Applied</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-5">Candidate Name</th>
+                <th className="px-6 py-5">Phone</th>
+                <th className="px-6 py-5">Email</th>
+                <th className="px-6 py-5">Qual.</th>
+                <th className="px-6 py-5">Exp.</th>
+                <th className="px-6 py-5">Join Timeline</th>
+                <th className="px-6 py-5">Applied</th>
+                <th className="px-6 py-5">Status</th>
+                <th className="px-6 py-5 text-right">Actions</th>
               </tr>
             </thead>
             
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-white/5">
               {loading ? (
                 // SKELETON LOADER
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 rounded-full w-28"></div></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 rounded-full w-24"></div></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 rounded-full w-36"></div></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 rounded-full w-12"></div></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 rounded-full w-12"></div></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 rounded-full w-20"></div></td>
-                    <td className="px-6 py-4"><div className="h-3 bg-slate-200 rounded-full w-16"></div></td>
-                    <td className="px-6 py-4"><div className="h-7 bg-slate-200 rounded-full w-20"></div></td>
-                    <td className="px-6 py-4 text-right flex justify-end space-x-2"><div className="h-7 bg-slate-200 rounded-md w-7"></div><div className="h-7 bg-slate-200 rounded-md w-7"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-white/10 rounded-full w-28"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-white/10 rounded-full w-24"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-white/10 rounded-full w-36"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-white/10 rounded-full w-12"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-white/10 rounded-full w-12"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-white/10 rounded-full w-20"></div></td>
+                    <td className="px-6 py-4"><div className="h-3 bg-white/10 rounded-full w-16"></div></td>
+                    <td className="px-6 py-4"><div className="h-7 bg-white/10 rounded-full w-20"></div></td>
+                    <td className="px-6 py-4 text-right flex justify-end space-x-2"><div className="h-7 bg-white/10 rounded-md w-8"></div><div className="h-7 bg-white/10 rounded-md w-8"></div></td>
                   </tr>
                 ))
               ) : sortedCandidates.length === 0 ? (
                 // EMPTY STATE
                 <tr>
-                  <td colSpan="9" className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan="9" className="px-6 py-16 text-center text-slate-400">
                     <div className="flex flex-col items-center">
-                      <LayoutGrid className="w-12 h-12 text-slate-300 mb-3" />
-                      <p className="text-base font-bold text-navy-800">No applicants found</p>
-                      <p className="text-xs text-slate-400 mt-1">Try resetting your filters or search criteria.</p>
+                      <LayoutGrid className="w-12 h-12 text-slate-500 mb-4 opacity-50" />
+                      <p className="text-lg font-bold text-white">No applicants found</p>
+                      <p className="text-sm text-slate-500 mt-2 font-light">Try resetting your filters or search criteria.</p>
                     </div>
                   </td>
                 </tr>
@@ -366,45 +366,45 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
       </div>
 
       {/* Contact Form Inquiries */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-xs overflow-hidden mt-8">
-        <div className="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden mb-10">
+        <div className="px-8 py-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-navy-800">Contact Form Inquiries</h2>
-            <p className="text-sm text-slate-500">Messages submitted through the public contact form.</p>
+            <h2 className="text-xl font-bold text-white">Contact Inquiries</h2>
+            <p className="text-sm text-slate-400 mt-1 font-light">Messages submitted through the public contact form.</p>
           </div>
-          <span className="text-xs font-semibold text-slate-600">{contactMessagesState.length} message{contactMessagesState.length === 1 ? "" : "s"}</span>
+          <span className="text-xs font-semibold text-brand-accent tracking-widest uppercase bg-brand-accent/10 border border-brand-accent/20 px-3 py-1.5 rounded-full">{contactMessagesState.length} message{contactMessagesState.length === 1 ? "" : "s"}</span>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-100">
-            <thead className="bg-slate-50 text-left text-xs font-bold text-slate-500 uppercase tracking-wider select-none">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/5 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
               <tr>
-                <th className="px-6 py-4">Name</th>
-                <th className="px-6 py-4">Email</th>
-                <th className="px-6 py-4">Phone</th>
-                <th className="px-6 py-4">Message</th>
-                <th className="px-6 py-4">Submitted</th>
-                <th className="px-6 py-4">Action</th>
+                <th className="px-8 py-5">Name</th>
+                <th className="px-8 py-5">Email</th>
+                <th className="px-8 py-5">Phone</th>
+                <th className="px-8 py-5">Message</th>
+                <th className="px-8 py-5">Submitted</th>
+                <th className="px-8 py-5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-white/5">
               {contactMessagesState.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan="6" className="px-8 py-16 text-center text-slate-500 font-light">
                     No contact inquiries found.
                   </td>
                 </tr>
               ) : (
                 contactMessagesState.map((message) => (
-                  <tr key={message.id || message.timestamp}>
-                    <td className="px-6 py-4 text-sm font-medium text-slate-900">{message.name}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{message.email}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600 font-mono">{message.phone || "-"}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600 max-w-md break-words">{message.message}</td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{message.timestamp ? new Date(message.timestamp).toLocaleString() : "-"}</td>
-                    <td className="px-6 py-4 text-right">
+                  <tr key={message.id || message.timestamp} className="hover:bg-white/5 transition border-b border-white/5">
+                    <td className="px-8 py-5 text-sm font-semibold text-white">{message.name}</td>
+                    <td className="px-8 py-5 text-sm text-slate-300">{message.email}</td>
+                    <td className="px-8 py-5 text-sm text-slate-400 font-mono">{message.phone || "-"}</td>
+                    <td className="px-8 py-5 text-sm text-slate-300 max-w-md break-words font-light leading-relaxed">{message.message}</td>
+                    <td className="px-8 py-5 text-sm text-slate-500">{message.timestamp ? new Date(message.timestamp).toLocaleString() : "-"}</td>
+                    <td className="px-8 py-5 text-right">
                       <button
                         onClick={() => handleDeleteContact(message.id)}
-                        className="inline-flex items-center justify-center rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition"
+                        className="inline-flex items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-xs font-bold text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition"
                       >
                         Delete
                       </button>

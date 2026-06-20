@@ -292,7 +292,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
         </div>
         <h3 className="text-2xl font-bold text-navy-800 mb-3">Application Submitted!</h3>
         <p className="text-slate-600 mb-6 text-sm leading-relaxed">
-          Thank you for applying to HirePinnacle50. Your profile has been saved successfully. 
+          Thank you for applying to PlaceIO. Your profile has been saved successfully. 
           A notification has been sent to our recruiters. We will contact you if your skills match our open roles.
         </p>
         <button
@@ -593,7 +593,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
             className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 mt-1 cursor-pointer"
           />
           <label htmlFor="consent" className="ml-2 text-sm text-slate-600 select-none cursor-pointer">
-            I agree to HirePinnacle50 collecting and storing my data for recruitment purposes. *
+            I agree to PlaceIO collecting and storing my data for recruitment purposes. *
           </label>
         </div>
         {validationErrors.consent && <p className="text-rose-500 text-xs">{validationErrors.consent}</p>}
