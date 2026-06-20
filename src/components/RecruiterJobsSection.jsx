@@ -86,7 +86,7 @@ const RecruiterJobsSection = ({ currentUser }) => {
                 </button>
                 <button
                   onClick={() => {
-                    const url = `${window.location.origin}/placeio/apply/${job.id}`;
+                    const url = `${window.location.origin}/HirePinnacle50/apply/${job.id}`;
                     navigator.clipboard.writeText(url).then(() => alert("Share link copied!"));
                   }}
                   className="flex-1 py-2 bg-white/5 text-white border border-white/10 rounded-lg hover:bg-white/10 transition text-sm font-semibold"
