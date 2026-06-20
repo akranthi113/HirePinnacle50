@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import DashboardComponent from "../components/Dashboard";
 import RecruiterJobsSection from "../components/RecruiterJobsSection";
 import { getCandidates, getContactMessages, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord } from "../firebase/firestore";
+import { fetchApplicationsByRecruiter } from "../firebase/jobs";
 
 const Dashboard = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -11,18 +12,20 @@ const Dashboard = () => {
 
   const [candidates, setCandidates] = useState([]);
   const [contactMessages, setContactMessages] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
 
 
-  // Load candidates and contact messages
+  // Load candidates, contact messages, and recruiter applications
   const loadCandidatesData = async (silent = false) => {
     if (!silent) setDataLoading(true);
     // silent flag indicates background refresh; no separate state needed
 
 
-    const [candidateResult, contactResult] = await Promise.all([
+    const [candidateResult, contactResult, applicationResult] = await Promise.all([
       getCandidates(),
       getContactMessages(),
+      currentUser?.id ? fetchApplicationsByRecruiter(currentUser.id) : { applications: [], error: null }
     ]);
 
     if (candidateResult.error) {
@@ -34,6 +37,11 @@ const Dashboard = () => {
       console.error("Contact messages load error:", contactResult.error);
     } else {
       setContactMessages(contactResult.messages);
+    }
+    if (applicationResult?.error) {
+      console.error("Applications load error:", applicationResult.error);
+    } else if (applicationResult) {
+      setApplications(applicationResult.applications);
     }
     setDataLoading(false);
   };
@@ -79,13 +87,19 @@ const Dashboard = () => {
         <DashboardComponent
           candidates={candidates}
           contactMessages={contactMessages}
+          applications={applications}
           refreshData={() => loadCandidatesData(true)}
           updateCandidateStatus={updateCandidateStatus}
           deleteContactMessage={deleteContactMessage}
           deleteCandidateRecord={deleteCandidateRecord}
         />
         {/* Recruiter Job Management */}
-        <RecruiterJobsSection currentUser={currentUser} />
+        <RecruiterJobsSection 
+          currentUser={currentUser} 
+          candidates={candidates}
+          applications={applications}
+          refreshApplications={() => loadCandidatesData(true)}
+        />
       </div>
     </div>
   );

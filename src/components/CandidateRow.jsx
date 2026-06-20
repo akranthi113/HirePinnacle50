@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { Copy, Check, FileDown, Eye, X, Trash2 } from "lucide-react";
 
-const CandidateRow = ({ candidate, onStatusChange, onDeleteCandidate, userProfile }) => {
+const CandidateRow = ({ candidate, onStatusChange, onDeleteCandidate, userProfile, applications = [] }) => {
   const [copied, setCopied] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   const appliedDate = candidate.timestamp
     ? (candidate.timestamp.toDate ? candidate.timestamp.toDate().toLocaleDateString() : new Date(candidate.timestamp).toLocaleDateString())
     : "N/A";
+
+  const candidateApps = (applications || []).filter(app => app.candidate_id === candidate.id);
+  const appliedRoles = candidateApps.map(app => app.jobs?.title).filter(Boolean);
+  const roleText = appliedRoles.length > 0 ? appliedRoles.join(", ") : "General Network";
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -63,6 +67,19 @@ How often will you be able to join? ${candidate.joiningTimeline || ""}`;
           >
             {candidate.fullName}
           </button>
+        </td>
+
+        {/* Applied Role */}
+        <td className="px-6 py-4 whitespace-nowrap">
+          {appliedRoles.length > 0 ? (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+              {roleText}
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200">
+              General Network
+            </span>
+          )}
         </td>
 
         {/* Phone */}
@@ -229,6 +246,20 @@ How often will you be able to join? ${candidate.joiningTimeline || ""}`;
               <div>
                 <span className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-1">Join Timeline</span>
                 <span className="text-slate-900 font-medium">{candidate.joiningTimeline || "N/A"}</span>
+              </div>
+              <div className="sm:col-span-2">
+                <span className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-1">Applied Roles / Context</span>
+                <div className="mt-1">
+                  {appliedRoles.length > 0 ? (
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                      {roleText}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200">
+                      General Network (Apply Now)
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="sm:col-span-2">
                 <span className="block text-xs font-semibold text-brand-primary uppercase tracking-wider mb-2">Residential Address with Pincode</span>

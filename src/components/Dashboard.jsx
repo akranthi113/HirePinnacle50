@@ -7,7 +7,7 @@ import NotificationBadge from "./NotificationBadge";
 import CandidateRow from "./CandidateRow";
 import { Search, Filter, RefreshCw, Download, CheckCircle, AlertCircle, LayoutGrid } from "lucide-react";
 
-const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord, loading = false }) => {
+const Dashboard = ({ candidates, contactMessages, applications = [], refreshData, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord, loading = false }) => {
   const { currentUser, userProfile } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
   const [candidatesState, setCandidates] = useState(candidates);
@@ -311,6 +311,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <thead className="bg-slate-50 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
               <tr>
                 <th className="px-6 py-5">Candidate Name</th>
+                <th className="px-6 py-5">Applied Role</th>
                 <th className="px-6 py-5">Phone</th>
                 <th className="px-6 py-5">Email</th>
                 <th className="px-6 py-5">Qual.</th>
@@ -354,6 +355,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
                   <CandidateRow
                     key={cand.id}
                     candidate={cand}
+                    applications={applications}
                     onStatusChange={handleStatusChange}
                     onDeleteCandidate={handleDeleteCandidate}
                     userProfile={userProfile}
