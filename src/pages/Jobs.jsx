@@ -1,19 +1,17 @@
 // src/pages/Jobs.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { fetchJobs, deleteJob } from "../firebase/jobs";
 import { useNavigate } from "react-router-dom";
 import JobCard from "../components/JobCard";
-import JobDetailModal from "../components/JobDetailModal";
 import { useAuth } from "../context/AuthContext";
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]);
+
   const [searchTitle, setSearchTitle] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
   const [filterJobType, setFilterJobType] = useState("");
   const [filterExperience, setFilterExperience] = useState("");
-  const [selectedJob, setSelectedJob] = useState(null);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
@@ -26,20 +24,16 @@ const JobsPage = () => {
     load();
   }, []);
 
-  // Apply search and filter criteria
-  useEffect(() => {
-    const filtered = jobs.filter((j) => {
+  // Derive filtered jobs with useMemo to avoid extra state and effect
+  const filteredJobs = React.useMemo(() => {
+    return jobs.filter((j) => {
       const titleMatch = j.title.toLowerCase().includes(searchTitle.toLowerCase());
       const locationMatch = j.location.toLowerCase().includes(searchLocation.toLowerCase());
       const typeMatch = filterJobType ? (j.job_type || "").toLowerCase() === filterJobType.toLowerCase() : true;
       const expMatch = filterExperience ? (j.experience_level || "").toLowerCase() === filterExperience.toLowerCase() : true;
       return titleMatch && locationMatch && typeMatch && expMatch;
     });
-    setFilteredJobs(filtered);
-  }, [searchTitle, searchLocation, filterJobType, filterExperience, jobs]);
-
-  const openDetail = (job) => setSelectedJob(job);
-  const closeDetail = () => setSelectedJob(null);
+  }, [jobs, searchTitle, searchLocation, filterJobType, filterExperience]);
 
   const handleApply = (jobId) => navigate(`/apply/${jobId}`);
 
@@ -54,12 +48,12 @@ const JobsPage = () => {
   };
 
   const emptyState = (
-    <div className="text-center py-24 glassmorphism rounded-3xl border border-white/10 shadow-lg">
-      <div className="w-24 h-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+    <div className="text-center py-24 glassmorphism rounded-3xl border border-slate-200 shadow-sm">
+      <div className="w-24 h-24 bg-white border border-slate-200 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">
         <svg className="w-12 h-12 text-brand-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
       </div>
-      <p className="text-2xl font-medium text-white mb-4">No opportunities found.</p>
-      <p className="text-slate-400 mb-10 max-w-md mx-auto font-light leading-relaxed">It looks like there are no roles matching your criteria at the moment. Try adjusting your filters or check back later.</p>
+      <p className="text-2xl font-medium text-slate-900 mb-4">No opportunities found.</p>
+      <p className="text-slate-600 mb-10 max-w-md mx-auto font-light leading-relaxed">It looks like there are no roles matching your criteria at the moment. Try adjusting your filters or check back later.</p>
       {currentUser && (
         <button
           onClick={() => navigate("/dashboard")}
@@ -72,17 +66,17 @@ const JobsPage = () => {
   );
 
   return (
-    <div className="bg-brand-darker min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8 font-sans relative overflow-hidden">
+    <div className="bg-slate-50 min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8 font-sans relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute top-0 right-0 w-full h-[500px] bg-hero-pattern opacity-50 z-0"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Hero Section */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
-            Discover Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-300">Career Move</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
+            Discover Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-600">Career Move</span>
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light">
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto font-light">
             Explore exciting opportunities across top companies and take the next step in your professional journey.
           </p>
         </div>
@@ -99,7 +93,7 @@ const JobsPage = () => {
                 placeholder="Search job title..."
                 value={searchTitle}
                 onChange={(e) => setSearchTitle(e.target.value)}
-                className="pl-12 w-full bg-brand-dark/50 border border-white/10 text-white placeholder-slate-400 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all"
+                className="pl-12 w-full bg-white border border-slate-200 text-slate-900 placeholder-slate-400 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all"
               />
             </div>
             <div className="relative group">
@@ -111,37 +105,37 @@ const JobsPage = () => {
                 placeholder="Location..."
                 value={searchLocation}
                 onChange={(e) => setSearchLocation(e.target.value)}
-                className="pl-12 w-full bg-brand-dark/50 border border-white/10 text-white placeholder-slate-400 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all"
+                className="pl-12 w-full bg-white border border-slate-200 text-slate-900 placeholder-slate-400 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all"
               />
             </div>
             <select
               value={filterJobType}
               onChange={(e) => setFilterJobType(e.target.value)}
-              className="w-full bg-brand-dark/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all appearance-none cursor-pointer"
+              className="w-full bg-white border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-brand-dark text-white">Any Job Type</option>
-              <option value="Full-time" className="bg-brand-dark text-white">Full-time</option>
-              <option value="Part-time" className="bg-brand-dark text-white">Part-time</option>
-              <option value="Contract" className="bg-brand-dark text-white">Contract</option>
-              <option value="Internship" className="bg-brand-dark text-white">Internship</option>
+              <option value="" className="bg-white text-slate-900">Any Job Type</option>
+              <option value="Full-time" className="bg-white text-slate-900">Full-time</option>
+              <option value="Part-time" className="bg-white text-slate-900">Part-time</option>
+              <option value="Contract" className="bg-white text-slate-900">Contract</option>
+              <option value="Internship" className="bg-white text-slate-900">Internship</option>
             </select>
             <select
               value={filterExperience}
               onChange={(e) => setFilterExperience(e.target.value)}
-              className="w-full bg-brand-dark/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all appearance-none cursor-pointer"
+              className="w-full bg-white border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary block p-4 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-brand-dark text-white">Any Experience Level</option>
-              <option value="Fresher" className="bg-brand-dark text-white">Fresher</option>
-              <option value="Junior" className="bg-brand-dark text-white">Junior (1-3 yrs)</option>
-              <option value="Mid-Level" className="bg-brand-dark text-white">Mid-Level (3-5 yrs)</option>
-              <option value="Senior" className="bg-brand-dark text-white">Senior (5+ yrs)</option>
+              <option value="" className="bg-white text-slate-900">Any Experience Level</option>
+              <option value="Fresher" className="bg-white text-slate-900">Fresher</option>
+              <option value="Junior" className="bg-white text-slate-900">Junior (1-3 yrs)</option>
+              <option value="Mid-Level" className="bg-white text-slate-900">Mid-Level (3-5 yrs)</option>
+              <option value="Senior" className="bg-white text-slate-900">Senior (5+ yrs)</option>
             </select>
           </div>
         </div>
 
         {/* Job list or empty state */}
         <div className="mb-8 flex justify-between items-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-2xl font-bold text-slate-900">
             {filteredJobs.length} {filteredJobs.length === 1 ? 'Opportunity' : 'Opportunities'} Found
           </h2>
         </div>
@@ -156,7 +150,7 @@ const JobsPage = () => {
                   key={job.id}
                   job={job}
                   isOwner={currentUser?.id === job.recruiter_id}
-                  onViewDetails={() => openDetail(job)}
+                  onViewDetails={() => navigate(`/jobs/${job.id}`, { state: { job } })}
                   onApply={() => handleApply(job.id)}
                   onDelete={() => handleDeleteJob(job.id)}
                 />
@@ -165,14 +159,6 @@ const JobsPage = () => {
           )}
         </div>
 
-        {/* Detail modal */}
-        {selectedJob && (
-          <JobDetailModal
-            job={selectedJob}
-            onClose={closeDetail}
-            onApply={() => handleApply(selectedJob.id)}
-          />
-        )}
       </div>
     </div>
   );

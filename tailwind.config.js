@@ -11,9 +11,10 @@ export default {
       },
       colors: {
         brand: {
-          dark: '#0f172a',
-          darker: '#020617',
           light: '#f8fafc',
+          lighter: '#ffffff',
+          dark: '#1e293b',
+          darker: '#0f172a',
           primary: '#3b82f6',
           accent: '#10b981',
           accentHover: '#059669',

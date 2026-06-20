@@ -288,14 +288,14 @@ const CandidateForm = ({ jobId, jobTitle }) => {
         <div className="bg-emerald-50 rounded-full p-4 w-16 h-16 flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 className="w-10 h-10 text-emerald-500" />
         </div>
-        <h3 className="text-2xl font-bold text-navy-800 mb-3">Application Submitted!</h3>
+        <h3 className="text-2xl font-bold text-slate-900 mb-3">Application Submitted!</h3>
         <p className="text-slate-600 mb-6 text-sm leading-relaxed">
           Thank you for applying to PlaceIO. Your profile has been saved successfully. 
           A notification has been sent to our recruiters. We will contact you if your skills match our open roles.
         </p>
         <button
           onClick={() => setFormStatus({ submitting: false, success: false, error: "" })}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg shadow-sm transition"
+          className="btn-primary px-6 py-2.5 rounded-lg shadow-sm transition"
         >
           {jobTitle ? "Submit Another Profile" : "Submit Another Profile"}
         </button>
@@ -306,12 +306,12 @@ const CandidateForm = ({ jobId, jobTitle }) => {
   return (
     <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 sm:p-8 max-w-3xl mx-auto my-8">
       <div className="mb-8 border-b border-slate-100 pb-5">
-        <h2 className="text-2xl font-extrabold text-navy-800">Job Application Form</h2>
+        <h2 className="text-2xl font-extrabold text-slate-900">Job Application Form</h2>
         <p className="text-slate-500 text-sm mt-1">Please provide accurate information. Fields marked with * are required.</p>
         {jobTitle && (
           <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Applying For</p>
-            <h3 className="mt-1 text-lg font-semibold text-navy-800">{jobTitle}</h3>
+            <h3 className="mt-1 text-lg font-semibold text-slate-900">{jobTitle}</h3>
           </div>
         )}
       </div>
@@ -320,7 +320,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
         
         {/* Section 1: Personal Details */}
         <div>
-          <h3 className="text-md font-bold text-blue-600 uppercase tracking-wider mb-4 border-l-4 border-blue-500 pl-2">
+          <h3 className="text-md font-bold text-brand-primary uppercase tracking-wider mb-4 border-l-4 border-brand-primary pl-2">
             1. Personal Details
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -333,7 +333,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Enter your full name"
-                className={`w-full border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent ${
                   validationErrors.fullName ? "border-rose-400 focus:ring-rose-500" : "border-slate-200"
                 }`}
               />
@@ -429,7 +429,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
 
         {/* Section 2: Contact Details */}
         <div className="pt-4 border-t border-slate-100">
-          <h3 className="text-md font-bold text-blue-600 uppercase tracking-wider mb-4 border-l-4 border-blue-500 pl-2">
+          <h3 className="text-md font-bold text-brand-primary uppercase tracking-wider mb-4 border-l-4 border-brand-primary pl-2">
             2. Contact Details
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -501,7 +501,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
 
         {/* Section 3: Qualifications & Job Details */}
         <div className="pt-4 border-t border-slate-100">
-          <h3 className="text-md font-bold text-blue-600 uppercase tracking-wider mb-4 border-l-4 border-blue-500 pl-2">
+          <h3 className="text-md font-bold text-brand-primary uppercase tracking-wider mb-4 border-l-4 border-brand-primary pl-2">
             3. Qualification & Professional Info
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -588,7 +588,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
             id="consent"
             checked={formData.consent}
             onChange={handleInputChange}
-            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 mt-1 cursor-pointer"
+            className="h-4 w-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary mt-1 cursor-pointer"
           />
           <label htmlFor="consent" className="ml-2 text-sm text-slate-600 select-none cursor-pointer">
             I agree to PlaceIO collecting and storing my data for recruitment purposes. *
@@ -609,7 +609,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
           <button
             type="submit"
             disabled={formStatus.submitting}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-150 disabled:opacity-50 flex items-center justify-center text-sm"
+            className="w-full sm:w-auto btn-primary px-8 py-3 rounded-lg shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-150 disabled:opacity-50 flex items-center justify-center text-sm"
           >
             {formStatus.submitting ? (
               <>

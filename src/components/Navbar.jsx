@@ -85,12 +85,12 @@ const Navbar = () => {
   const isJobsRoute = location.pathname === "/jobs";
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glassmorphism border-b border-white/10' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glassmorphism border-b border-slate-200' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="text-2xl font-bold text-white tracking-tight flex items-center group">
+            <Link to="/" className="text-2xl font-bold text-slate-900 tracking-tight flex items-center group">
               <span className="text-brand-primary mr-1 animate-pulse-glow">❖</span>
               <span>Place</span>
               <span className="text-brand-accent">IO</span>
@@ -103,8 +103,8 @@ const Navbar = () => {
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`text-sm font-medium transition-all hover:text-white py-2 relative group ${
-                  isLinkActive(item.id) ? "text-white" : "text-slate-400"
+                className={`text-sm font-medium transition-all hover:text-brand-primary py-2 relative group ${
+                  isLinkActive(item.id) ? "text-brand-primary" : "text-slate-600"
                 }`}
               >
                 {item.label}
@@ -113,8 +113,8 @@ const Navbar = () => {
             ))}
             <Link
               to="/jobs"
-              className={`text-sm font-medium transition-all hover:text-white py-2 relative group ${
-                isJobsRoute ? "text-white" : "text-slate-400"
+              className={`text-sm font-medium transition-all hover:text-brand-primary py-2 relative group ${
+                isJobsRoute ? "text-brand-primary" : "text-slate-600"
               }`}
             >
               Jobs
@@ -129,10 +129,10 @@ const Navbar = () => {
             </Link>
 
             {currentUser && !currentUser.isAnonymous ? (
-              <div className="flex items-center space-x-3 border-l border-white/10 pl-4">
+              <div className="flex items-center space-x-3 border-l border-slate-200 pl-4">
                 <Link
                   to={userProfile?.role === "admin" ? "/admin" : "/dashboard"}
-                  className="flex items-center text-slate-300 hover:text-white text-sm font-medium bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg transition"
+                  className="flex items-center text-slate-700 hover:text-slate-900 text-sm font-medium bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition"
                   title="Go to Dashboard"
                 >
                   <LayoutDashboard className="w-4 h-4 mr-2" />
@@ -149,7 +149,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="text-slate-400 hover:text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5 transition"
+                className="text-slate-600 hover:text-slate-900 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-100 transition"
               >
                 Recruiter Login
               </Link>
@@ -160,7 +160,7 @@ const Navbar = () => {
           <div className="flex md:hidden items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-slate-300 hover:text-white focus:outline-none p-2 rounded-md hover:bg-white/10"
+              className="text-slate-600 hover:text-slate-900 focus:outline-none p-2 rounded-md hover:bg-slate-100"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -170,25 +170,25 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden glassmorphism border-t border-white/10 px-4 pt-2 pb-4 space-y-1">
+        <div className="md:hidden glassmorphism border-t border-slate-200 px-4 pt-2 pb-4 space-y-1">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
               className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium transition ${
                 isLinkActive(item.id)
-                  ? "bg-brand-primary/20 text-white"
-                  : "text-slate-300 hover:bg-white/5"
+                  ? "bg-brand-primary/10 text-brand-primary"
+                  : "text-slate-700 hover:bg-slate-100"
               }`}
             >
               {item.label}
             </button>
           ))}
-          <div className="pt-4 pb-2 border-t border-white/10 flex flex-col space-y-3 px-2">
+          <div className="pt-4 pb-2 border-t border-slate-200 flex flex-col space-y-3 px-2">
             <Link
               to="/jobs"
               onClick={() => setIsOpen(false)}
-              className="bg-white/5 text-slate-200 text-center font-medium py-3 rounded-md hover:bg-white/10 transition"
+              className="bg-slate-100 text-slate-800 text-center font-medium py-3 rounded-md hover:bg-slate-200 transition"
             >
               Browse Jobs
             </Link>
@@ -204,7 +204,7 @@ const Navbar = () => {
                 <Link
                   to={userProfile?.role === "admin" ? "/admin" : "/dashboard"}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center text-white bg-white/5 py-3 rounded-md font-medium"
+                  className="flex items-center justify-center text-slate-800 bg-slate-100 py-3 rounded-md font-medium"
                 >
                   <LayoutDashboard className="w-4 h-4 mr-2" />
                   Dashboard
@@ -224,7 +224,7 @@ const Navbar = () => {
               <Link
                 to="/login"
                 onClick={() => setIsOpen(false)}
-                className="text-slate-400 hover:text-white text-center py-3 rounded-md hover:bg-white/5 transition border border-white/10 text-sm font-medium"
+                className="text-slate-600 hover:text-slate-900 text-center py-3 rounded-md hover:bg-slate-100 transition border border-slate-200 text-sm font-medium"
               >
                 Recruiter Login
               </Link>

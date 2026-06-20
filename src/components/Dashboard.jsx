@@ -184,11 +184,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
       )}
 
       {/* Header Panel */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 pb-6 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Recruiter Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-2 font-light">
-            Welcome back, <span className="font-semibold text-white">{userProfile?.displayName || currentUser?.email}</span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Recruiter Dashboard</h1>
+          <p className="text-slate-600 text-sm mt-2 font-light">
+            Welcome back, <span className="font-semibold text-slate-900">{userProfile?.displayName || currentUser?.email}</span>
           </p>
         </div>
         <div className="flex items-center space-x-4 mt-6 sm:mt-0">
@@ -197,7 +197,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="glassmorphism border border-white/10 text-slate-300 hover:text-brand-primary hover:bg-white/10 p-3 rounded-xl shadow-lg transition-all disabled:opacity-50"
+            className="bg-white border border-slate-200 text-slate-600 hover:text-brand-primary hover:bg-slate-50 p-3 rounded-xl shadow-sm transition-all disabled:opacity-50"
             title="Refresh database records"
           >
             <RefreshCw className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`} />
@@ -209,7 +209,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
       {!loading && <AnalyticsCards candidates={candidatesState} />}
 
       {/* Search and Filter Panel */}
-      <div className="glassmorphism rounded-2xl border border-white/10 p-6 mb-10">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
           {/* Real-time search */}
           <div className="md:col-span-4 relative group">
@@ -221,7 +221,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
               placeholder="Search by name, phone, or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-brand-darker/50 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition"
             />
           </div>
 
@@ -230,11 +230,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedQualification}
               onChange={(e) => setSelectedQualification(e.target.value)}
-              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
+              className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-brand-dark text-white">Qualification</option>
+              <option value="" className="bg-white text-slate-900">Qualification</option>
               {uniqueQualifications.map((q) => (
-                <option key={q} value={q} className="bg-brand-dark text-white">{q}</option>
+                <option key={q} value={q} className="bg-white text-slate-900">{q}</option>
               ))}
             </select>
           </div>
@@ -244,11 +244,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedExperience}
               onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
+              className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-brand-dark text-white">Experience</option>
+              <option value="" className="bg-white text-slate-900">Experience</option>
               {["Fresher", "1 Year", "2 Years", "3 Years", "4 Years", "5+ Years"].map((exp) => (
-                <option key={exp} value={exp} className="bg-brand-dark text-white">{exp}</option>
+                <option key={exp} value={exp} className="bg-white text-slate-900">{exp}</option>
               ))}
             </select>
           </div>
@@ -258,11 +258,11 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedJoiningTimeline}
               onChange={(e) => setSelectedJoiningTimeline(e.target.value)}
-              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
+              className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-brand-dark text-white">Join Timeline</option>
+              <option value="" className="bg-white text-slate-900">Join Timeline</option>
               {uniqueJoiningTimelines.map((jt) => (
-                <option key={jt} value={jt} className="bg-brand-dark text-white">{jt}</option>
+                <option key={jt} value={jt} className="bg-white text-slate-900">{jt}</option>
               ))}
             </select>
           </div>
@@ -272,23 +272,23 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full bg-brand-darker/50 border border-white/10 text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
+              className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary block p-3 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-brand-dark text-white">Status</option>
+              <option value="" className="bg-white text-slate-900">Status</option>
               {["New", "Contacted", "Interview", "Selected", "Rejected", "On Hold"].map((st) => (
-                <option key={st} value={st} className="bg-brand-dark text-white">{st}</option>
+                <option key={st} value={st} className="bg-white text-slate-900">{st}</option>
               ))}
             </select>
           </div>
         </div>
 
         {/* Sorting & Export controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mt-6 pt-5 border-t border-white/10 gap-5">
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-6 pt-5 border-t border-slate-200 gap-5">
           <div className="flex items-center space-x-3">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Sort By:</span>
+            <span className="text-xs font-semibold text-slate-600 uppercase tracking-widest">Sort By:</span>
             <button
               onClick={() => setSortOrder(sortOrder === "latest" ? "oldest" : "latest")}
-              className="text-xs bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg font-semibold transition border border-white/10 tracking-wide"
+              className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold transition border border-slate-300 tracking-wide"
             >
               {sortOrder === "latest" ? "Latest First" : "Oldest First"}
             </button>
@@ -305,10 +305,10 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
       </div>
 
       {/* Candidate Records Table */}
-      <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden mb-12">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/10">
-            <thead className="bg-white/5 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-slate-50 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
               <tr>
                 <th className="px-6 py-5">Candidate Name</th>
                 <th className="px-6 py-5">Phone</th>
@@ -322,7 +322,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
               </tr>
             </thead>
             
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 // SKELETON LOADER
                 Array.from({ length: 5 }).map((_, i) => (
@@ -341,10 +341,10 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
               ) : sortedCandidates.length === 0 ? (
                 // EMPTY STATE
                 <tr>
-                  <td colSpan="9" className="px-6 py-16 text-center text-slate-400">
+                  <td colSpan="9" className="px-6 py-16 text-center text-slate-500">
                     <div className="flex flex-col items-center">
-                      <LayoutGrid className="w-12 h-12 text-slate-500 mb-4 opacity-50" />
-                      <p className="text-lg font-bold text-white">No applicants found</p>
+                      <LayoutGrid className="w-12 h-12 text-slate-400 mb-4 opacity-50" />
+                      <p className="text-lg font-bold text-slate-800">No applicants found</p>
                       <p className="text-sm text-slate-500 mt-2 font-light">Try resetting your filters or search criteria.</p>
                     </div>
                   </td>
@@ -366,17 +366,17 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
       </div>
 
       {/* Contact Form Inquiries */}
-      <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden mb-10">
-        <div className="px-8 py-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-10">
+        <div className="px-8 py-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white">Contact Inquiries</h2>
-            <p className="text-sm text-slate-400 mt-1 font-light">Messages submitted through the public contact form.</p>
+            <h2 className="text-xl font-bold text-slate-900">Contact Inquiries</h2>
+            <p className="text-sm text-slate-600 mt-1 font-light">Messages submitted through the public contact form.</p>
           </div>
           <span className="text-xs font-semibold text-brand-accent tracking-widest uppercase bg-brand-accent/10 border border-brand-accent/20 px-3 py-1.5 rounded-full">{contactMessagesState.length} message{contactMessagesState.length === 1 ? "" : "s"}</span>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/10">
-            <thead className="bg-white/5 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-slate-50 text-left text-xs font-bold text-brand-primary uppercase tracking-wider select-none">
               <tr>
                 <th className="px-8 py-5">Name</th>
                 <th className="px-8 py-5">Email</th>
@@ -386,7 +386,7 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
                 <th className="px-8 py-5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {contactMessagesState.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="px-8 py-16 text-center text-slate-500 font-light">
@@ -395,12 +395,12 @@ const Dashboard = ({ candidates, contactMessages, refreshData, updateCandidateSt
                 </tr>
               ) : (
                 contactMessagesState.map((message) => (
-                  <tr key={message.id || message.timestamp} className="hover:bg-white/5 transition border-b border-white/5">
-                    <td className="px-8 py-5 text-sm font-semibold text-white">{message.name}</td>
-                    <td className="px-8 py-5 text-sm text-slate-300">{message.email}</td>
-                    <td className="px-8 py-5 text-sm text-slate-400 font-mono">{message.phone || "-"}</td>
-                    <td className="px-8 py-5 text-sm text-slate-300 max-w-md break-words font-light leading-relaxed">{message.message}</td>
-                    <td className="px-8 py-5 text-sm text-slate-500">{message.timestamp ? new Date(message.timestamp).toLocaleString() : "-"}</td>
+                  <tr key={message.id || message.timestamp} className="hover:bg-slate-50 transition border-b border-slate-100">
+                    <td className="px-8 py-5 text-sm font-semibold text-slate-900">{message.name}</td>
+                    <td className="px-8 py-5 text-sm text-slate-700">{message.email}</td>
+                    <td className="px-8 py-5 text-sm text-slate-600 font-mono">{message.phone || "-"}</td>
+                    <td className="px-8 py-5 text-sm text-slate-700 max-w-md break-words font-light leading-relaxed">{message.message}</td>
+                    <td className="px-8 py-5 text-sm text-slate-600">{message.timestamp ? new Date(message.timestamp).toLocaleString() : "-"}</td>
                     <td className="px-8 py-5 text-right">
                       <button
                         onClick={() => handleDeleteContact(message.id)}

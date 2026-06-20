@@ -5,7 +5,7 @@ const HowItWorks = () => {
   const steps = [
     {
       step: "01",
-      icon: <FileText className="w-6 h-6 text-blue-600" />,
+      icon: <FileText className="w-6 h-6 text-brand-primary" />,
       title: "Submit Application",
       description: "Upload your professional resume and fill in your details on our secure applicant page."
     },
@@ -34,11 +34,11 @@ const HowItWorks = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">The Journey</h2>
-          <p className="mt-2 text-3xl font-extrabold text-navy-800 sm:text-4xl">
+          <h2 className="text-base text-brand-primary font-semibold tracking-wide uppercase">The Journey</h2>
+          <p className="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">
             How Our Recruitment Process Works
           </p>
-          <div className="mt-4 h-1.5 w-16 bg-blue-600 mx-auto rounded-full"></div>
+          <div className="mt-4 h-1.5 w-16 bg-brand-primary mx-auto rounded-full"></div>
         </div>
 
         {/* Process Flow Cards */}
@@ -47,17 +47,17 @@ const HowItWorks = () => {
             {steps.map((item, idx) => (
               <div key={idx} className="relative flex flex-col items-center text-center px-4 group">
                 {/* Step circle */}
-                <div className="relative bg-white rounded-full p-5 w-16 h-16 flex items-center justify-center shadow-md border-2 border-slate-100 mb-6 group-hover:border-blue-600 transition-colors duration-300">
+                <div className="relative bg-white rounded-full p-5 w-16 h-16 flex items-center justify-center shadow-sm border border-slate-200 mb-6 group-hover:border-brand-primary transition-colors duration-300">
                   {item.icon}
-                  <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-xxs font-extrabold w-5 h-5 flex items-center justify-center rounded-full border border-white">
+                  <span className="absolute -top-1.5 -right-1.5 bg-brand-primary text-white text-xs font-extrabold w-5 h-5 flex items-center justify-center rounded-full border border-white">
                     {item.step}
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-bold text-navy-800 mb-3 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-brand-primary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
+                <p className="text-slate-600 text-sm leading-relaxed max-w-xs">
                   {item.description}
                 </p>
 

@@ -54,11 +54,11 @@ const ContactForm = () => {
           {/* Info Side */}
           <div className="lg:col-span-1 flex flex-col justify-between">
             <div>
-              <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Contact</h2>
-              <p className="mt-2 text-3xl font-extrabold text-navy-800 sm:text-4xl">
+              <h2 className="text-base text-brand-primary font-semibold tracking-wide uppercase">Contact</h2>
+              <p className="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">
                 Get In Touch
               </p>
-              <div className="mt-4 h-1.5 w-12 bg-blue-600 rounded-full mb-8"></div>
+              <div className="mt-4 h-1.5 w-12 bg-brand-primary rounded-full mb-8"></div>
               <p className="text-slate-600 leading-relaxed font-light mb-8">
                 Have open roles or looking for a custom staffing solution? Or perhaps you have a career query? 
                 Reach out to us and our PlaceIO recruiters will get back to you shortly.
@@ -69,11 +69,11 @@ const ContactForm = () => {
             <div className="space-y-6">
               <div className="flex items-start">
                 <div className="bg-white border border-slate-100 shadow-sm p-3 rounded-lg mr-4">
-                  <Mail className="w-5 h-5 text-blue-600" />
+                  <Mail className="w-5 h-5 text-brand-primary" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-navy-800 uppercase tracking-wider">Email Us</h4>
-                  <p className="text-blue-600 text-sm hover:underline mt-0.5">
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Email Us</h4>
+                  <p className="text-brand-primary text-sm hover:underline mt-0.5">
                     <a href="mailto:contact@placeio.com">contact@placeio.com</a>
                   </p>
                 </div>
@@ -84,7 +84,7 @@ const ContactForm = () => {
                   <Phone className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-navy-800 uppercase tracking-wider">Call Us</h4>
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Call Us</h4>
                   <p className="text-slate-600 text-sm mt-0.5">+91 80 4920 1800</p>
                 </div>
               </div>
@@ -94,7 +94,7 @@ const ContactForm = () => {
                   <MapPin className="w-5 h-5 text-rose-500" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-navy-800 uppercase tracking-wider">Our Office</h4>
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Our Office</h4>
                   <p className="text-slate-600 text-sm mt-0.5 leading-relaxed">
                     PlaceIO, 4th Block, Koramangala,<br />
                     Bangalore, Karnataka 560034, India
@@ -106,7 +106,7 @@ const ContactForm = () => {
 
           {/* Form Side */}
           <div className="lg:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-8">
-            <h3 className="text-xl font-bold text-navy-800 mb-6">Send Us A Message</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-6">Send Us A Message</h3>
             
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
@@ -189,7 +189,7 @@ const ContactForm = () => {
               <button
                 type="submit"
                 disabled={status.submitting}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-3 rounded-lg shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-150 flex items-center justify-center disabled:opacity-50"
+                className="w-full sm:w-auto btn-primary text-sm px-6 py-3 shadow-sm hover:shadow hover:-translate-y-0.5 flex items-center justify-center disabled:opacity-50"
               >
                 {status.submitting ? (
                   <>

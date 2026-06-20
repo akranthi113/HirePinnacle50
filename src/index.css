@@ -7,23 +7,23 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-brand-darker text-slate-200 antialiased;
+    @apply bg-brand-light text-slate-800 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 .bg-hero-pattern {
-  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%),
-              radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.15), transparent 40%),
-              #020617;
+  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.1), transparent 40%),
+              #f8fafc;
 }
 
 .glassmorphism {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
 }
 
 .glassmorphism-hover {
@@ -31,10 +31,10 @@
 }
 
 .glassmorphism-hover:hover {
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
 /* Custom transitions and scrollbar */
@@ -43,10 +43,10 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-brand-darker;
+  @apply bg-slate-100;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-700 rounded-full hover:bg-slate-500;
+  @apply bg-slate-300 rounded-full hover:bg-slate-400;
 }
 
 /* Base button animations */
@@ -54,12 +54,12 @@
   @apply bg-brand-primary text-white font-medium rounded-lg px-6 py-2 transition-all duration-300;
 }
 .btn-primary:hover {
-  @apply bg-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.6)] transform -translate-y-0.5;
+  @apply bg-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.4)] transform -translate-y-0.5;
 }
 
 .btn-accent {
   @apply bg-brand-accent text-white font-medium rounded-lg px-6 py-2 transition-all duration-300;
 }
 .btn-accent:hover {
-  @apply bg-brand-accentHover shadow-[0_0_15px_rgba(16,185,129,0.6)] transform -translate-y-0.5;
+  @apply bg-brand-accentHover shadow-[0_0_15px_rgba(16,185,129,0.4)] transform -translate-y-0.5;
 }

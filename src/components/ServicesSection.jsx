@@ -26,7 +26,7 @@ const ServicesSection = () => {
   ];
 
   return (
-    <section id="services" className="py-24 relative overflow-hidden bg-brand-dark">
+    <section id="services" className="py-24 relative overflow-hidden bg-white">
       {/* Decorative gradient mesh */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-brand-primary/5 via-brand-accent/5 to-transparent rounded-full filter blur-[120px] pointer-events-none"></div>
 
@@ -34,11 +34,11 @@ const ServicesSection = () => {
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="text-brand-primary font-semibold tracking-widest uppercase mb-4 text-sm">Our Ecosystem</h2>
-          <p className="text-4xl md:text-5xl font-extrabold text-white mb-6">
+          <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">
             Comprehensive Solutions
           </p>
           <div className="h-1 w-24 bg-gradient-to-r from-brand-primary to-brand-accent mx-auto rounded-full mb-8"></div>
-          <p className="text-lg text-slate-400 leading-relaxed font-light max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 leading-relaxed font-light max-w-2xl mx-auto">
             From scaling engineering squads to securing your next CTO, PlaceIO provides modular recruitment solutions tailored to modern tech enterprises.
           </p>
         </div>
@@ -52,13 +52,13 @@ const ServicesSection = () => {
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-brand-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-2xl"></div>
               
-              <div className="bg-brand-darker/50 rounded-xl p-4 w-16 h-16 flex items-center justify-center border border-white/5 mb-8 group-hover:bg-brand-primary/10 transition-colors duration-300">
+              <div className="bg-slate-50 rounded-xl p-4 w-16 h-16 flex items-center justify-center border border-slate-200 mb-8 group-hover:bg-brand-primary/10 transition-colors duration-300">
                 {service.icon}
               </div>
-              <h3 className="text-xl font-bold text-white mb-4 group-hover:text-brand-primary transition-colors">
+              <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-brand-primary transition-colors">
                 {service.title}
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed font-light">
+              <p className="text-slate-600 text-sm leading-relaxed font-light">
                 {service.description}
               </p>
             </div>

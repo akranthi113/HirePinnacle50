@@ -11,6 +11,7 @@ import Jobs from "./pages/Jobs";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import JobDetails from "./pages/JobDetails";
 
 const PrivacyPolicy = () => (
   <div className="bg-slate-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -59,6 +60,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+<Route path="/jobs/:jobId" element={<JobDetails />} />
             </Routes>
           </main>
 
