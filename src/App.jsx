@@ -12,6 +12,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import JobDetails from "./pages/JobDetails";
+import BlogList from "./pages/BlogList";
+import BlogPost from "./pages/BlogPost";
+import BlogForm from "./components/BlogForm";
 
 const PrivacyPolicy = () => (
   <div className="bg-slate-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -61,6 +64,10 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 <Route path="/jobs/:jobId" element={<JobDetails />} />
+          <Route path="/blog" element={<BlogList />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          {/* Optional route for creating a blog post (protected) */}
+          <Route path="/dashboard/blog/new" element={<BlogForm />} />
             </Routes>
           </main>
 

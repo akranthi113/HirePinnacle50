@@ -83,6 +83,7 @@ const Navbar = () => {
   ];
 
   const isJobsRoute = location.pathname === "/jobs";
+  const isBlogRoute = location.pathname.startsWith("/blog");
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glassmorphism border-b border-slate-200' : 'bg-transparent'}`}>
@@ -119,6 +120,15 @@ const Navbar = () => {
             >
               Jobs
               <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-brand-primary transform origin-left transition-transform duration-300 ${isJobsRoute ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
+            </Link>
+            <Link
+              to="/blog"
+              className={`text-sm font-medium transition-all hover:text-brand-primary py-2 relative group ${
+                isBlogRoute ? "text-brand-primary" : "text-slate-600"
+              }`}
+            >
+              Blog
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-brand-primary transform origin-left transition-transform duration-300 ${isBlogRoute ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
           </div>
 
@@ -191,6 +201,13 @@ const Navbar = () => {
               className="bg-slate-100 text-slate-800 text-center font-medium py-3 rounded-md hover:bg-slate-200 transition"
             >
               Browse Jobs
+            </Link>
+            <Link
+              to="/blog"
+              onClick={() => setIsOpen(false)}
+              className="bg-slate-100 text-slate-800 text-center font-medium py-3 rounded-md hover:bg-slate-200 transition"
+            >
+              Our Blog
             </Link>
             <Link
               to="/apply"
