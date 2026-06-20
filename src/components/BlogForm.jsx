@@ -12,6 +12,8 @@ const BlogForm = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,27 +23,35 @@ const BlogForm = () => {
     // Generate a simple slug from title
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
-    const { blog, error: submitError } = await createBlog({
-      title,
-      content,
-      slug,
-      thumbnail_url: thumbnailUrl,
-      author_id: currentUser?.id || currentUser?.uid || null
-    });
+      const { blog, error: submitError } = await createBlog({
+        title,
+        content,
+        slug,
+        thumbnail_url: thumbnailUrl,
+        author_id: currentUser?.id || currentUser?.uid || null
+      });
 
-    setLoading(false);
-    
-    if (submitError) {
-      setError(submitError);
-    } else {
-      navigate('/blog');
-    }
+      setLoading(false);
+
+      if (submitError) {
+        setError(submitError);
+      } else {
+        // Show a success message and navigate back to the dashboard after a short delay
+        setSuccessMessage('Your blog post was published successfully!');
+        // Clear the form fields
+        setTitle('');
+        setContent('');
+        setThumbnailUrl('');
+        // Redirect to dashboard after 1.5 seconds so user can see the message
+        setTimeout(() => navigate('/dashboard'), 1500);
+      }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-sm border border-slate-200 mt-20">
       <h2 className="text-2xl font-bold text-slate-900 mb-6">Create New Blog Post</h2>
       {error && <div className="mb-4 text-red-600 text-sm">{error}</div>}
+      {successMessage && <div className="mb-4 text-green-600 text-sm">{successMessage}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>
@@ -78,7 +88,7 @@ const BlogForm = () => {
         <div className="flex justify-end gap-3 pt-4">
           <button
             type="button"
-            onClick={() => navigate('/blog')}
+            onClick={() => navigate('/dashboard')}
             className="px-6 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition"
           >
             Cancel
