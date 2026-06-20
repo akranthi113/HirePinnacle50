@@ -124,9 +124,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
     if (!formData.gender) errors.gender = "Gender is required.";
     if (!formData.maritalStatus) errors.maritalStatus = "Marital status is required.";
 
-    if (!cleanAadhar) {
-      errors.aadharNumber = "Aadhar number is required.";
-    } else if (cleanAadhar.length !== 12) {
+    if (cleanAadhar && cleanAadhar.length !== 12) {
       errors.aadharNumber = "Aadhar number must be exactly 12 digits.";
     }
 
@@ -413,7 +411,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
 
             {/* Aadhar Number */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Aadhar Number *</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">Aadhar Number</label>
               <input
                 type="text"
                 name="aadharNumber"
