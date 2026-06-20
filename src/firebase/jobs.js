@@ -92,7 +92,7 @@ export const fetchApplicationsByRecruiter = async (recruiterId) => {
   try {
     const { data, error } = await supabase
       .from("applications")
-      .select('*, jobs!inner(job_id, title, location, recruiter_id)')
+      .select('*, jobs!inner(id, title, location, recruiter_id)')
       .eq('jobs.recruiter_id', recruiterId)
       .order('applied_at', { ascending: false });
     if (error) throw error;
