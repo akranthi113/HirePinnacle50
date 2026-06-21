@@ -334,6 +334,7 @@ const Dashboard = ({ candidates, contactMessages, applications = [], refreshData
                 <th className="px-6 py-5">Exp.</th>
                 <th className="px-6 py-5">Join Timeline</th>
                 <th className="px-6 py-5">Applied</th>
+                <th className="px-6 py-5">Tracking ID</th>
                 <th className="px-6 py-5">Status</th>
                 <th className="px-6 py-5 text-right">Actions</th>
               </tr>
@@ -358,7 +359,7 @@ const Dashboard = ({ candidates, contactMessages, applications = [], refreshData
               ) : sortedCandidates.length === 0 ? (
                 // EMPTY STATE
                 <tr>
-                  <td colSpan="9" className="px-6 py-16 text-center text-slate-500">
+                  <td colSpan="10" className="px-6 py-16 text-center text-slate-500">
                     <div className="flex flex-col items-center">
                       <LayoutGrid className="w-12 h-12 text-slate-400 mb-4 opacity-50" />
                       <p className="text-lg font-bold text-slate-800">No applicants found</p>

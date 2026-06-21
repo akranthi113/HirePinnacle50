@@ -112,6 +112,17 @@ How often will you be able to join? ${candidate.joiningTimeline || ""}`;
           {appliedDate}
         </td>
 
+        {/* Tracking ID */}
+        <td className="px-6 py-4 whitespace-nowrap">
+          {candidate.tracking_id ? (
+            <span className="text-xs font-mono font-semibold text-brand-primary bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg">
+              {candidate.tracking_id}
+            </span>
+          ) : (
+            <span className="text-xs text-slate-400">—</span>
+          )}
+        </td>
+
         {/* Status */}
         <td className="px-6 py-4 whitespace-nowrap">
           <select

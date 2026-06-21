@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { checkDuplicateCandidate, addCandidate } from "../firebase/firestore";
+import { Link } from "react-router-dom";
+import { checkDuplicateCandidate, addCandidate, updateCandidateTrackingId } from "../firebase/firestore";
 import { applyToJob } from "../firebase/jobs";
 import { uploadResume } from "../firebase/storage";
 import { sendNewApplicationEmail } from "../utils/emailService";
@@ -27,10 +28,22 @@ const CandidateForm = ({ jobId, jobTitle }) => {
   const [formStatus, setFormStatus] = useState({
     submitting: false,
     success: false,
-    error: ""
+    error: "",
+    trackingId: null
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+
+  const generateTrackingId = (name) => {
+    const prefix = name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+    const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `PLACE-${prefix}-${rand}`;
+  };
 
   const qualifications = ["10th", "12th", "Diploma", "Graduate", "Post Graduate", "Doctorate"];
   const experiences = ["Fresher", "1 Year", "2 Years", "3 Years", "4 Years", "5+ Years"];
@@ -205,8 +218,9 @@ const CandidateForm = ({ jobId, jobTitle }) => {
       };
 
       const candidateId = generateUUID();
+      const trackingId = generateTrackingId(formData.fullName.trim());
 
-      // 2. Save Candidate details in one single operation
+      // 2. Save Candidate first (without tracking_id so it always works)
       const candidatePayload = {
         fullName: formData.fullName.trim(),
         fatherName: formData.fatherName.trim(),
@@ -226,9 +240,16 @@ const CandidateForm = ({ jobId, jobTitle }) => {
         resumeURL: null
       };
 
-      const candidateSaveRes = await addCandidate(candidatePayload, candidateId);
+      let candidateSaveRes = await addCandidate(candidatePayload, candidateId);
       if (candidateSaveRes.error) {
         throw new Error(`Failed to save candidate: ${candidateSaveRes.error}`);
+      }
+
+      // 3. Save tracking_id separately (best-effort; works once DB column exists)
+      try {
+        await updateCandidateTrackingId(candidateId, trackingId);
+      } catch (e) {
+        console.warn("Could not save tracking_id (column may not exist yet):", e.message);
       }
 
       if (jobId) {
@@ -251,7 +272,7 @@ const CandidateForm = ({ jobId, jobTitle }) => {
       await sendNewApplicationEmail(fullCandidateData);
 
       // Successful Submission
-      setFormStatus({ submitting: false, success: true, error: "" });
+      setFormStatus({ submitting: false, success: true, error: "", trackingId });
       
       // Reset form
       setFormData({
@@ -289,16 +310,21 @@ const CandidateForm = ({ jobId, jobTitle }) => {
           <CheckCircle2 className="w-10 h-10 text-emerald-500" />
         </div>
         <h3 className="text-2xl font-bold text-slate-900 mb-3">Application Submitted!</h3>
-        <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+        <p className="text-slate-600 mb-4 text-sm leading-relaxed">
           Thank you for applying to PlaceIO. Your profile has been saved successfully. 
           A notification has been sent to our recruiters. We will contact you if your skills match our open roles.
         </p>
-        <button
-          onClick={() => setFormStatus({ submitting: false, success: false, error: "" })}
-          className="btn-primary px-6 py-2.5 rounded-lg shadow-sm transition"
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Your Application Tracking ID</p>
+          <p className="text-2xl font-extrabold text-brand-primary tracking-wider">{formStatus.trackingId}</p>
+          <p className="text-xs text-slate-500 mt-2">Save this ID. Use it to track your application status.</p>
+        </div>
+        <Link
+          to="/track-application"
+          className="btn-primary px-6 py-2.5 rounded-lg shadow-sm transition inline-block"
         >
-          {jobTitle ? "Submit Another Profile" : "Submit Another Profile"}
-        </button>
+          Track Your Application
+        </Link>
       </div>
     );
   }

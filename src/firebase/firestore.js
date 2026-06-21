@@ -160,6 +160,28 @@ export const updateCandidateStatus = async (candidateId, candidateName, oldStatu
   }
 };
 
+export const getCandidateByTrackingId = async (trackingId) => {
+  try {
+    const { data, error } = await supabase
+      .from("candidates")
+      .select("*")
+      .eq("tracking_id", trackingId)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      return { candidate: null, error: null };
+    }
+    return { candidate: data, error: null };
+  } catch (error) {
+    console.error("Error fetching candidate by tracking ID:", error);
+    if (error.message && error.message.includes("tracking_id")) {
+      return { candidate: null, error: "Tracking ID feature is being initialized. Please try again later." };
+    }
+    return { candidate: null, error: error.message };
+  }
+};
+
 export const deleteCandidateRecord = async (candidateId) => {
   try {
     const { error } = await supabase
@@ -171,6 +193,21 @@ export const deleteCandidateRecord = async (candidateId) => {
     return { success: true, error: null };
   } catch (error) {
     console.error("Error deleting candidate:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+export const updateCandidateTrackingId = async (candidateId, trackingId) => {
+  try {
+    const { error } = await supabase
+      .from("candidates")
+      .update({ tracking_id: trackingId })
+      .eq("id", candidateId);
+
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (error) {
+    console.error("Error updating tracking ID:", error);
     return { success: false, error: error.message };
   }
 };

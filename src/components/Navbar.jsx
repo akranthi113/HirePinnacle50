@@ -130,6 +130,12 @@ const Navbar = () => {
               Blog
               <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-brand-primary transform origin-left transition-transform duration-300 ${isBlogRoute ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
+            <Link
+              to="/track-application"
+              className="text-sm font-medium transition-all hover:text-brand-primary py-2 text-slate-600"
+            >
+              Track Application
+            </Link>
           </div>
 
           {/* CTA / Auth Actions */}
@@ -208,6 +214,13 @@ const Navbar = () => {
               className="bg-slate-100 text-slate-800 text-center font-medium py-3 rounded-md hover:bg-slate-200 transition"
             >
               Our Blog
+            </Link>
+            <Link
+              to="/track-application"
+              onClick={() => setIsOpen(false)}
+              className="bg-slate-100 text-slate-800 text-center font-medium py-3 rounded-md hover:bg-slate-200 transition"
+            >
+              Track Application
             </Link>
             <Link
               to="/apply"

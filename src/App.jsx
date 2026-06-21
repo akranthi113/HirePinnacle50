@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -15,6 +15,7 @@ import JobDetails from "./pages/JobDetails";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
 import BlogForm from "./components/BlogForm";
+import TrackApplication from "./pages/TrackApplication";
 
 const PrivacyPolicy = () => (
   <div className="bg-slate-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -46,18 +47,9 @@ const PrivacyPolicy = () => (
   </div>
 );
 
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-};
-
 function App() {
   return (
     <Router basename="/HirePinnacle50">
-      <ScrollToTop />
       <AuthProvider>
         <div className="flex flex-col min-h-screen bg-slate-50">
           <Navbar />
@@ -76,7 +68,8 @@ function App() {
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           {/* Optional route for creating a blog post (protected) */}
-          <Route path="/dashboard/blog/new" element={<BlogForm />} />
+           <Route path="/dashboard/blog/new" element={<BlogForm />} />
+           <Route path="/track-application" element={<TrackApplication />} />
             </Routes>
           </main>
 
