@@ -1,58 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getCandidateByTrackingId } from "../firebase/firestore";
-import { Search, CheckCircle, XCircle, Clock, AlertCircle } from "lucide-react";
+import { Search, CheckCircle, XCircle, Clock, AlertCircle, History, X } from "lucide-react";
+
+const TRACKING_HISTORY_KEY = "trackingIdHistory";
 
 const TrackApplication = () => {
   const [trackingId, setTrackingId] = useState("");
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [autoLoaded, setAutoLoaded] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const wrapperRef = useRef(null);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("lastTrackingId");
-    if (stored && !autoLoaded) {
-      setTrackingId(stored);
-      setAutoLoaded(true);
-      handleTrackFromStorage(stored);
+    const stored = sessionStorage.getItem(TRACKING_HISTORY_KEY);
+    if (stored) {
+      try {
+        setHistory(JSON.parse(stored));
+      } catch {}
     }
   }, []);
 
-  const handleTrackFromStorage = async (id) => {
-    setLoading(true);
-    setError("");
-    setCandidate(null);
-    try {
-      const result = await getCandidateByTrackingId(id.trim().toUpperCase());
-      if (result.error) {
-        setError(result.error);
-      } else if (!result.candidate) {
-        setError("No application found with this Tracking ID. Please check and try again.");
-      } else {
-        setCandidate(result.candidate);
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowHistory(false);
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again later.");
-    } finally {
-      setLoading(false);
     }
-  };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const handleTrack = async (e) => {
-    e.preventDefault();
-    if (!trackingId.trim()) return;
-    sessionStorage.setItem("lastTrackingId", trackingId.trim().toUpperCase());
+  const handleTrack = async (e, idOverride) => {
+    e?.preventDefault();
+    const id = (idOverride || trackingId).trim().toUpperCase();
+    if (!id) return;
+    setShowHistory(false);
     setLoading(true);
     setError("");
     setCandidate(null);
+
+    const trimmed = id.trim();
+    if (!trimmed) { setLoading(false); return; }
+
     try {
-      const result = await getCandidateByTrackingId(trackingId.trim().toUpperCase());
+      const result = await getCandidateByTrackingId(trimmed);
       if (result.error) {
         setError(result.error);
       } else if (!result.candidate) {
         setError("No application found with this Tracking ID. Please check and try again.");
       } else {
         setCandidate(result.candidate);
+        setTrackingId(trimmed);
+        const newHistory = [trimmed, ...history.filter((h) => h !== trimmed)].slice(0, 5);
+        setHistory(newHistory);
+        sessionStorage.setItem(TRACKING_HISTORY_KEY, JSON.stringify(newHistory));
       }
     } catch (err) {
       setError("Something went wrong. Please try again later.");
@@ -63,21 +66,19 @@ const TrackApplication = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case "New":
-        return <Clock className="w-5 h-5 text-blue-500" />;
-      case "Contacted":
-        return <AlertCircle className="w-5 h-5 text-amber-500" />;
-      case "Interview":
-        return <AlertCircle className="w-5 h-5 text-purple-500" />;
-      case "Selected":
-        return <CheckCircle className="w-5 h-5 text-emerald-500" />;
-      case "Rejected":
-        return <XCircle className="w-5 h-5 text-rose-500" />;
-      case "On Hold":
-        return <Clock className="w-5 h-5 text-slate-500" />;
-      default:
-        return <Clock className="w-5 h-5 text-slate-400" />;
+      case "New": return <Clock className="w-5 h-5 text-blue-500" />;
+      case "Contacted": return <AlertCircle className="w-5 h-5 text-amber-500" />;
+      case "Interview": return <AlertCircle className="w-5 h-5 text-purple-500" />;
+      case "Selected": return <CheckCircle className="w-5 h-5 text-emerald-500" />;
+      case "Rejected": return <XCircle className="w-5 h-5 text-rose-500" />;
+      case "On Hold": return <Clock className="w-5 h-5 text-slate-500" />;
+      default: return <Clock className="w-5 h-5 text-slate-400" />;
     }
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    sessionStorage.removeItem(TRACKING_HISTORY_KEY);
   };
 
   return (
@@ -85,11 +86,11 @@ const TrackApplication = () => {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Track Your Application</h1>
-          <p className="mt-4 text-slate-500 text-sm font-light">Enter your Application Tracking ID to check your current status.</p>
+          <p className="mt-4 text-slate-500 text-sm font-light">Enter or select your Application Tracking ID to check your current status.</p>
         </div>
 
-        <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
-          <div className="relative">
+        <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+          <div className="relative" ref={wrapperRef}>
             <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-500">
               <Search className="w-5 h-5" />
             </span>
@@ -97,9 +98,37 @@ const TrackApplication = () => {
               type="text"
               placeholder="Enter Tracking ID (e.g., PLACE-RA-ABCDEF)"
               value={trackingId}
-              onChange={(e) => setTrackingId(e.target.value)}
+              onChange={(e) => setTrackingId(e.target.value.toUpperCase())}
+              onFocus={() => history.length > 0 && setShowHistory(true)}
               className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition tracking-wider uppercase"
             />
+
+            {showHistory && history.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2 bg-slate-50 border-b border-slate-100">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <History className="w-3.5 h-3.5" /> Recent IDs
+                  </span>
+                  <button
+                    type="button"
+                    onClick={clearHistory}
+                    className="text-xs text-rose-500 hover:text-rose-700 font-semibold"
+                  >
+                    Clear
+                  </button>
+                </div>
+                {history.map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => handleTrack(new Event("submit"), id)}
+                    className="w-full text-left px-4 py-3 text-sm font-mono font-semibold text-brand-primary hover:bg-slate-50 transition border-b border-slate-100 last:border-b-0"
+                  >
+                    {id}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <button
             type="submit"
