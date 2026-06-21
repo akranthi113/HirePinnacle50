@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Copy, Check, FileDown, Eye, X, Trash2 } from "lucide-react";
 
 const CandidateRow = ({ candidate, onStatusChange, onDeleteCandidate, userProfile, applications = [] }) => {

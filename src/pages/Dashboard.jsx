@@ -6,6 +6,7 @@ import RecruiterJobsSection from "../components/RecruiterJobsSection";
 import { getCandidates, getContactMessages, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord } from "../firebase/firestore";
 import { fetchApplicationsByRecruiter } from "../firebase/jobs";
 import { AlertCircle } from "lucide-react";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const Dashboard = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -22,33 +23,38 @@ const Dashboard = () => {
     if (!silent) setDataLoading(true);
     setDashboardError("");
 
-    const [candidateResult, contactResult, applicationResult] = await Promise.all([
-      getCandidates(),
-      getContactMessages(),
-      currentUser?.id ? fetchApplicationsByRecruiter(currentUser.id) : { applications: [], error: null }
-    ]);
+    try {
+      const [candidateResult, contactResult, applicationResult] = await Promise.all([
+        getCandidates(),
+        getContactMessages(),
+        currentUser?.id ? fetchApplicationsByRecruiter(currentUser.id) : { applications: [], error: null }
+      ]);
 
-    const errors = [];
-    if (candidateResult.error) {
-      errors.push("Candidates");
-    } else {
-      setCandidates(candidateResult.candidates);
-    }
-    if (contactResult.error) {
-      errors.push("Contact messages");
-    } else {
-      setContactMessages(contactResult.messages);
-    }
-    if (applicationResult?.error) {
-      errors.push("Applications");
-    } else if (applicationResult) {
-      setApplications(applicationResult.applications);
-    }
+      const errors = [];
+      if (candidateResult.error) {
+        errors.push("Candidates");
+      } else {
+        setCandidates(candidateResult.candidates);
+      }
+      if (contactResult.error) {
+        errors.push("Contact messages");
+      } else {
+        setContactMessages(contactResult.messages);
+      }
+      if (applicationResult?.error) {
+        errors.push("Applications");
+      } else if (applicationResult) {
+        setApplications(applicationResult.applications);
+      }
 
-    if (errors.length > 0) {
-      setDashboardError(`Failed to load: ${errors.join(", ")}. Some data may be outdated.`);
+      if (errors.length > 0) {
+        setDashboardError(`Failed to load: ${errors.join(", ")}. Some data may be outdated.`);
+      }
+    } catch (e) {
+      setDashboardError(e.message || "Failed to load dashboard data. Please try again.");
+    } finally {
+      setDataLoading(false);
     }
-    setDataLoading(false);
   };
 
   // Auth check and initial data load
@@ -62,6 +68,16 @@ const Dashboard = () => {
     }
    
   }, [currentUser, authLoading, navigate]);
+
+  // Force dataLoading to false after 10s (safety net against eternal spinner)
+  useEffect(() => {
+    if (!dataLoading) return;
+    const timer = setTimeout(() => {
+      setDataLoading(false);
+      setDashboardError("Loading timed out. The data may be outdated. Please retry.");
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, [dataLoading]);
 
   // Show spinner while auth or data loading
   if (authLoading || dataLoading) {
@@ -78,7 +94,7 @@ const Dashboard = () => {
     );
   }
 
-  // Guard against missing auth (should not reach here)
+  // Guard against missing auth or missing profile
   if (!currentUser || currentUser.isAnonymous) {
     return null;
   }
@@ -103,22 +119,23 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-        <DashboardComponent
-          candidates={candidates}
-          contactMessages={contactMessages}
-          applications={applications}
-          refreshData={() => loadCandidatesData(true)}
-          updateCandidateStatus={updateCandidateStatus}
-          deleteContactMessage={deleteContactMessage}
-          deleteCandidateRecord={deleteCandidateRecord}
-        />
-        {/* Recruiter Job Management */}
-        <RecruiterJobsSection 
-          currentUser={currentUser} 
-          candidates={candidates}
-          applications={applications}
-          refreshApplications={() => loadCandidatesData(true)}
-        />
+        <ErrorBoundary>
+          <DashboardComponent
+            candidates={candidates}
+            contactMessages={contactMessages}
+            applications={applications}
+            refreshData={() => loadCandidatesData(true)}
+            updateCandidateStatus={updateCandidateStatus}
+            deleteContactMessage={deleteContactMessage}
+            deleteCandidateRecord={deleteCandidateRecord}
+          />
+          <RecruiterJobsSection 
+            currentUser={currentUser} 
+            candidates={candidates}
+            applications={applications}
+            refreshApplications={() => loadCandidatesData(true)}
+          />
+        </ErrorBoundary>
       </div>
     </div>
   );

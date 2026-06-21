@@ -153,9 +153,9 @@ const Dashboard = ({ candidates, contactMessages, applications = [], refreshData
 
   // Filter & Search Candidates
   const filteredCandidates = candidatesState.filter((cand) => {
-    const nameMatch = (cand.fullName || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const phoneMatch = (cand.phone || "").includes(searchTerm);
-    const emailMatch = (cand.email || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const nameMatch = cand.fullName?.toLowerCase().includes(searchTerm.toLowerCase());
+    const phoneMatch = cand.phone?.includes(searchTerm);
+    const emailMatch = cand.email?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSearch = nameMatch || phoneMatch || emailMatch;
 
     const matchesQual = selectedQualification ? cand.qualification === selectedQualification : true;
