@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { checkDuplicateCandidate, addCandidate, updateCandidateTrackingId } from "../firebase/firestore";
 import { applyToJob } from "../firebase/jobs";
 import { uploadResume } from "../firebase/storage";
 import { sendNewApplicationEmail } from "../utils/emailService";
-import { CheckCircle2, Upload, AlertCircle, FileText } from "lucide-react";
+import { CheckCircle2, Upload, AlertCircle, FileText, ClipboardCheck } from "lucide-react";
 
 const CandidateForm = ({ jobId, jobTitle }) => {
   const [formData, setFormData] = useState({
@@ -44,6 +44,26 @@ const CandidateForm = ({ jobId, jobTitle }) => {
     const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
     return `PLACE-${prefix}-${rand}`;
   };
+
+  const [copied, setCopied] = useState(false);
+
+  const copyTrackingId = async () => {
+    if (formStatus.trackingId) {
+      await navigator.clipboard.writeText(formStatus.trackingId);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  useEffect(() => {
+    if (formStatus.success) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (formStatus.trackingId) {
+        sessionStorage.setItem("lastTrackingId", formStatus.trackingId);
+        navigator.clipboard.writeText(formStatus.trackingId).catch(() => {});
+      }
+    }
+  }, [formStatus.success]);
 
   const qualifications = ["10th", "12th", "Diploma", "Graduate", "Post Graduate", "Doctorate"];
   const experiences = ["Fresher", "1 Year", "2 Years", "3 Years", "4 Years", "5+ Years"];
@@ -314,10 +334,28 @@ const CandidateForm = ({ jobId, jobTitle }) => {
           Thank you for applying to PlaceIO. Your profile has been saved successfully. 
           A notification has been sent to our recruiters. We will contact you if your skills match our open roles.
         </p>
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
+        <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-6 mb-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Your Application Tracking ID</p>
-          <p className="text-2xl font-extrabold text-brand-primary tracking-wider">{formStatus.trackingId}</p>
-          <p className="text-xs text-slate-500 mt-2">Save this ID. Use it to track your application status.</p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <p className="text-3xl font-extrabold text-brand-primary tracking-wider select-all">{formStatus.trackingId}</p>
+            <button
+              onClick={copyTrackingId}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold border transition"
+            >
+              {copied ? (
+                <>
+                  <ClipboardCheck className="w-4 h-4 text-emerald-500" />
+                  <span className="text-emerald-700">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <FileText className="w-4 h-4 text-brand-primary" />
+                  <span className="text-brand-primary">Copy ID</span>
+                </>
+              )}
+            </button>
+          </div>
+          <p className="text-xs text-slate-500 mt-3">This ID has been copied to your clipboard. Save it to track your application status.</p>
         </div>
         <Link
           to="/track-application"

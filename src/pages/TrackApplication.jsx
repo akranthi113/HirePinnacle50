@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getCandidateByTrackingId } from "../firebase/firestore";
 import { Search, CheckCircle, XCircle, Clock, AlertCircle } from "lucide-react";
 
@@ -7,10 +7,41 @@ const TrackApplication = () => {
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [autoLoaded, setAutoLoaded] = useState(false);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("lastTrackingId");
+    if (stored && !autoLoaded) {
+      setTrackingId(stored);
+      setAutoLoaded(true);
+      handleTrackFromStorage(stored);
+    }
+  }, []);
+
+  const handleTrackFromStorage = async (id) => {
+    setLoading(true);
+    setError("");
+    setCandidate(null);
+    try {
+      const result = await getCandidateByTrackingId(id.trim().toUpperCase());
+      if (result.error) {
+        setError(result.error);
+      } else if (!result.candidate) {
+        setError("No application found with this Tracking ID. Please check and try again.");
+      } else {
+        setCandidate(result.candidate);
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleTrack = async (e) => {
     e.preventDefault();
     if (!trackingId.trim()) return;
+    sessionStorage.setItem("lastTrackingId", trackingId.trim().toUpperCase());
     setLoading(true);
     setError("");
     setCandidate(null);
