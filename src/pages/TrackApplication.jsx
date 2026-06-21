@@ -2,8 +2,28 @@ import React, { useState, useEffect, useRef } from "react";
 import { getCandidateByTrackingId } from "../firebase/firestore";
 import { Search, CheckCircle, XCircle, Clock, AlertCircle, History, X } from "lucide-react";
 
-const SINGLE_KEY = "lastTrackingId";
-const HISTORY_KEY = "trackingIdHistory";
+const FIVE_MINUTES = 5 * 60 * 1000;
+const HISTORY_KEY = "trackingIdHistory_v2";
+
+function now() {
+  return Date.now();
+}
+
+function readHistory() {
+  try {
+    const raw = sessionStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const items = JSON.parse(raw);
+    const cutoff = now() - FIVE_MINUTES;
+    return items.filter((item) => item.ts > cutoff);
+  } catch {
+    return [];
+  }
+}
+
+function writeHistory(items) {
+  sessionStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 6)));
+}
 
 const TrackApplication = () => {
   const [trackingId, setTrackingId] = useState("");
@@ -14,20 +34,18 @@ const TrackApplication = () => {
   const [showHistory, setShowHistory] = useState(false);
   const wrapperRef = useRef(null);
 
-  const loadFromStorage = (id) => {
-    if (!id) return;
-    setTrackingId(id);
-    trackId(id);
+  const findMostRecent = (items) => {
+    if (!items.length) return null;
+    return [...items].sort((a, b) => b.ts - a.ts)[0]?.id || null;
   };
 
   useEffect(() => {
-    const storedSingle = sessionStorage.getItem(SINGLE_KEY);
-    const storedHistory = sessionStorage.getItem(HISTORY_KEY);
-    if (storedHistory) {
-      try { setHistory(JSON.parse(storedHistory)); } catch {}
-    }
-    if (storedSingle) {
-      loadFromStorage(storedSingle);
+    const items = readHistory();
+    setHistory(items);
+    const mostRecent = findMostRecent(items);
+    if (mostRecent) {
+      setTrackingId(mostRecent);
+      trackId(mostRecent);
     }
   }, []);
 
@@ -41,8 +59,21 @@ const TrackApplication = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const items = readHistory();
+      setHistory(items);
+      const mostRecent = findMostRecent(items);
+      setTrackingId((current) => {
+        if (mostRecent && !current && !candidate) return mostRecent;
+        return current;
+      });
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [candidate]);
+
   const trackId = async (id) => {
-    const trimmed = id.trim().toUpperCase();
+    const trimmed = (id || "").trim().toUpperCase();
     if (!trimmed) return;
     setShowHistory(false);
     setLoading(true);
@@ -58,10 +89,11 @@ const TrackApplication = () => {
       } else {
         setCandidate(result.candidate);
         setTrackingId(trimmed);
-        const newHistory = [trimmed, ...history.filter((h) => h !== trimmed)].slice(0, 5);
-        setHistory(newHistory);
-        sessionStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
-        sessionStorage.setItem(SINGLE_KEY, trimmed);
+        const items = readHistory();
+        const filtered = items.filter((item) => item.id !== trimmed);
+        const newItems = [{ id: trimmed, ts: now() }, ...filtered].slice(0, 6);
+        writeHistory(newItems);
+        setHistory(newItems);
       }
     } catch (err) {
       setError("Something went wrong. Please try again later.");
@@ -70,10 +102,15 @@ const TrackApplication = () => {
     }
   };
 
-  const handleTrack = async (e) => {
+  const handleTrack = (e) => {
     e?.preventDefault?.();
     if (!trackingId.trim()) return;
-    await trackId(trackingId);
+    trackId(trackingId);
+  };
+
+  const handleHistoryClick = (id) => {
+    setTrackingId(id);
+    trackId(id);
   };
 
   const getStatusIcon = (status) => {
@@ -89,8 +126,8 @@ const TrackApplication = () => {
   };
 
   const clearHistory = () => {
-    setHistory([]);
     sessionStorage.removeItem(HISTORY_KEY);
+    setHistory([]);
   };
 
   return (
@@ -119,24 +156,30 @@ const TrackApplication = () => {
               <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-2 bg-slate-50 border-b border-slate-100">
                   <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                    <History className="w-3.5 h-3.5" /> Recent IDs
+                    <History className="w-3.5 h-3.5" /> Recent IDs (last 5 min)
                   </span>
-                  <button
-                    type="button"
-                    onClick={clearHistory}
-                    className="text-xs text-rose-500 hover:text-rose-700 font-semibold"
-                  >
-                    Clear
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-slate-400">Auto-clears in 5m</span>
+                    <button
+                      type="button"
+                      onClick={clearHistory}
+                      className="text-xs text-rose-500 hover:text-rose-700 font-semibold"
+                    >
+                      Clear
+                    </button>
+                  </div>
                 </div>
-                {history.map((id) => (
+                {history.map((item) => (
                   <button
-                    key={id}
+                    key={item.id}
                     type="button"
-                    onClick={() => handleTrack(new Event("submit"), id)}
+                    onClick={() => handleHistoryClick(item.id)}
                     className="w-full text-left px-4 py-3 text-sm font-mono font-semibold text-brand-primary hover:bg-slate-50 transition border-b border-slate-100 last:border-b-0"
                   >
-                    {id}
+                    {item.id}
+                    <span className="ml-2 text-[10px] text-slate-400 font-sans">
+                      {Math.max(1, Math.round((FIVE_MINUTES - (now() - item.ts)) / 60000))}m left
+                    </span>
                   </button>
                 ))}
               </div>
@@ -169,17 +212,15 @@ const TrackApplication = () => {
 
         {candidate && (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="bg-slate-50 px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">Application Status</p>
-                <div className="flex items-center space-x-2">
-                  {getStatusIcon(candidate.status)}
-                  <span className="text-xl font-extrabold text-slate-900">{candidate.status || "New"}</span>
-                </div>
+            <div className="bg-slate-50 px-6 py-5 border-b border-slate-200">
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Application Status</p>
+              <div className="flex items-center space-x-3">
+                {getStatusIcon(candidate.status)}
+                <span className="text-2xl font-extrabold text-slate-900">{candidate.status || "New"}</span>
               </div>
-              <div className="text-right">
-                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">Tracking ID</p>
-                <p className="text-lg font-extrabold text-brand-primary tracking-wider">{candidate.tracking_id}</p>
+              <div className="mt-3">
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">Your Tracking ID</p>
+                <p className="text-lg font-extrabold text-brand-primary tracking-wider select-all">{candidate.tracking_id}</p>
               </div>
             </div>
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
