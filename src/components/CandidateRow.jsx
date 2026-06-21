@@ -5,6 +5,15 @@ const CandidateRow = ({ candidate, onStatusChange, onDeleteCandidate, userProfil
   const [copied, setCopied] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
+  useEffect(() => {
+    if (!showDetailsModal) return;
+    const handleKey = (e) => {
+      if (e.key === "Escape") setShowDetailsModal(false);
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [showDetailsModal]);
+
   const appliedDate = candidate.timestamp
     ? (candidate.timestamp.toDate ? candidate.timestamp.toDate().toLocaleDateString() : new Date(candidate.timestamp).toLocaleDateString())
     : "N/A";
@@ -193,11 +202,11 @@ How often will you be able to join? ${candidate.joiningTimeline || ""}`;
 
       {/* Candidate Details Modal */}
       {showDetailsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="candidate-modal-title">
           <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 overflow-y-auto max-h-[90vh]">
             <div className="flex justify-between items-center border-b border-slate-200 pb-5 mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-slate-900">{candidate.fullName}</h3>
+                <h3 id="candidate-modal-title" className="text-2xl font-bold text-slate-900">{candidate.fullName}</h3>
                 <p className="text-slate-500 text-xs mt-1 tracking-wider uppercase">Application Details — Applied on {appliedDate}</p>
               </div>
               <button

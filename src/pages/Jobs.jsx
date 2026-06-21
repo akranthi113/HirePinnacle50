@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
+  const [loadError, setLoadError] = useState("");
 
   const [searchTitle, setSearchTitle] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
@@ -15,16 +16,16 @@ const JobsPage = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // Set page title
-  useEffect(() => {
-    document.title = "Job Opportunities | PlaceIO";
-  }, []);
-
   // Load jobs from Supabase
   useEffect(() => {
     const load = async () => {
-      const { jobs, error } = await fetchJobs();
-      if (!error) setJobs(jobs);
+      try {
+        const { jobs, error } = await fetchJobs();
+        if (error) throw new Error(error);
+        setJobs(jobs);
+      } catch (e) {
+        setLoadError(e.message || "Failed to load jobs. Please try again later.");
+      }
     };
     load();
   }, []);
@@ -138,12 +139,24 @@ const JobsPage = () => {
           </div>
         </div>
 
-        {/* Job list or empty state */}
-        <div className="mb-8 flex justify-between items-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <h2 className="text-2xl font-bold text-slate-900">
-            {filteredJobs.length} {filteredJobs.length === 1 ? 'Opportunity' : 'Opportunities'} Found
-          </h2>
-        </div>
+         {/* Job list or empty state */}
+         <div className="mb-8 flex justify-between items-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
+           <h2 className="text-2xl font-bold text-slate-900">
+             {filteredJobs.length} {filteredJobs.length === 1 ? 'Opportunity' : 'Opportunities'} Found
+           </h2>
+         </div>
+
+        {loadError && (
+          <div className="mb-6 bg-rose-50 border border-rose-100 rounded-xl p-4">
+            <p className="text-sm text-rose-700 font-medium">{loadError}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-2 text-xs font-bold text-rose-600 hover:text-rose-800 underline"
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
           {(filteredJobs.length ? filteredJobs : jobs).length === 0 ? (

@@ -17,6 +17,18 @@ import BlogPost from "./pages/BlogPost";
 import BlogForm from "./components/BlogForm";
 import TrackApplication from "./pages/TrackApplication";
 
+const NotFound = () => (
+  <div className="bg-slate-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="text-center max-w-md">
+      <h1 className="text-6xl font-extrabold text-slate-900 mb-4">404</h1>
+      <p className="text-lg text-slate-600 mb-8 font-light">The page you are looking for does not exist or has been moved.</p>
+      <Link to="/" className="btn-primary px-6 py-2.5 rounded-lg shadow-sm transition inline-block">
+        Back to Home
+      </Link>
+    </div>
+  </div>
+);
+
 const PrivacyPolicy = () => (
   <div className="bg-slate-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
     <div className="max-w-3xl mx-auto bg-white border border-slate-100 rounded-xl p-8 shadow-sm">
@@ -70,6 +82,7 @@ function App() {
           {/* Optional route for creating a blog post (protected) */}
            <Route path="/dashboard/blog/new" element={<BlogForm />} />
            <Route path="/track-application" element={<TrackApplication />} />
+           <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
 

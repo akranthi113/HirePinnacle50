@@ -112,37 +112,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (authError) {
-        const errMsg = authError.message || "";
-        // Seeding mechanism for initial kranthiaws113@gmail.com login
-        if (
-          cleanEmail === "kranthiaws113@gmail.com" &&
-          (errMsg.includes("Invalid login credentials") || errMsg.includes("user-not-found") || authError.status === 400)
-        ) {
-          console.log("Admin account not found in Auth. Seeding now...");
-          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: cleanEmail,
-            password,
-            options: {
-              data: {
-                displayName: "System Administrator"
-              }
-            }
-          });
-
-          if (signUpError) throw signUpError;
-
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-            email: cleanEmail,
-            password
-          });
-          if (signInError) throw signInError;
-
-          setIsAnonymous(false);
-          const profile = await fetchUserProfile(signInData.user.id);
-          return { user: signInData.user, error: null };
-        } else {
-          throw authError;
-        }
+        throw authError;
       }
 
       setIsAnonymous(false);
@@ -213,7 +183,13 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         setIsAnonymous(false);
         try {
-          await fetchUserProfile(user.id);
+          const profile = await fetchUserProfile(user.id);
+          if (!profile) {
+            // User auth exists but profile was deleted — force sign out
+            await supabase.auth.signOut();
+            setCurrentUser(null);
+            setUserProfile(null);
+          }
         } catch (err) {
           console.error("Auth state change profile fetch error:", err);
         }

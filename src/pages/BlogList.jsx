@@ -9,17 +9,20 @@ const BlogList = () => {
   const { currentUser, userProfile } = useAuth();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    document.title = "Blog | PlaceIO - Recruitment Insights & Career Tips";
-  }, []);
-
   const load = async () => {
-    const { blogs: fetchedBlogs, error } = await fetchBlogs();
-    if (!error) setBlogs(fetchedBlogs);
-    setLoading(false);
+    try {
+      const { blogs: fetchedBlogs, error } = await fetchBlogs();
+      if (error) throw new Error(error);
+      setBlogs(fetchedBlogs);
+    } catch (e) {
+      setLoadError(e.message || "Failed to load blog posts.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +51,23 @@ const BlogList = () => {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
           </svg>
           <p className="text-slate-600 text-xs font-semibold">Loading blog posts...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <div className="text-center max-w-md">
+          <p className="text-lg font-semibold text-rose-600 mb-2">Unable to load blog posts</p>
+          <p className="text-sm text-slate-600 mb-4">{loadError}</p>
+          <button
+            onClick={load}
+            className="px-6 py-2.5 text-sm font-medium text-white bg-brand-primary rounded-xl hover:bg-blue-600 shadow-sm transition"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );

@@ -5,6 +5,7 @@ import DashboardComponent from "../components/Dashboard";
 import RecruiterJobsSection from "../components/RecruiterJobsSection";
 import { getCandidates, getContactMessages, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord } from "../firebase/firestore";
 import { fetchApplicationsByRecruiter } from "../firebase/jobs";
+import { AlertCircle } from "lucide-react";
 
 const Dashboard = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -14,13 +15,12 @@ const Dashboard = () => {
   const [contactMessages, setContactMessages] = useState([]);
   const [applications, setApplications] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
-
+  const [dashboardError, setDashboardError] = useState("");
 
   // Load candidates, contact messages, and recruiter applications
   const loadCandidatesData = async (silent = false) => {
     if (!silent) setDataLoading(true);
-    // silent flag indicates background refresh; no separate state needed
-
+    setDashboardError("");
 
     const [candidateResult, contactResult, applicationResult] = await Promise.all([
       getCandidates(),
@@ -28,20 +28,25 @@ const Dashboard = () => {
       currentUser?.id ? fetchApplicationsByRecruiter(currentUser.id) : { applications: [], error: null }
     ]);
 
+    const errors = [];
     if (candidateResult.error) {
-      console.error("Candidate load error:", candidateResult.error);
+      errors.push("Candidates");
     } else {
       setCandidates(candidateResult.candidates);
     }
     if (contactResult.error) {
-      console.error("Contact messages load error:", contactResult.error);
+      errors.push("Contact messages");
     } else {
       setContactMessages(contactResult.messages);
     }
     if (applicationResult?.error) {
-      console.error("Applications load error:", applicationResult.error);
+      errors.push("Applications");
     } else if (applicationResult) {
       setApplications(applicationResult.applications);
+    }
+
+    if (errors.length > 0) {
+      setDashboardError(`Failed to load: ${errors.join(", ")}. Some data may be outdated.`);
     }
     setDataLoading(false);
   };
@@ -84,6 +89,20 @@ const Dashboard = () => {
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-primary/5 rounded-full filter blur-[150px] pointer-events-none z-0"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
+        {dashboardError && (
+          <div className="mb-6 bg-amber-50 border border-amber-100 rounded-xl p-4 flex items-start">
+            <AlertCircle className="w-5 h-5 text-amber-500 mr-3 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm text-amber-800 font-medium">{dashboardError}</p>
+              <button
+                onClick={() => loadCandidatesData()}
+                className="mt-2 text-xs font-bold text-amber-700 hover:text-amber-900 underline"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
         <DashboardComponent
           candidates={candidates}
           contactMessages={contactMessages}

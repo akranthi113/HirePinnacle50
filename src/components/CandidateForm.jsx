@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { checkDuplicateCandidate, addCandidate, updateCandidateTrackingId } from "../firebase/firestore";
+import { checkDuplicateCandidate, addCandidate, updateCandidateTrackingId, deleteCandidateRecord } from "../firebase/firestore";
 import { applyToJob } from "../firebase/jobs";
 import { uploadResume } from "../firebase/storage";
 import { sendNewApplicationEmail } from "../utils/emailService";
@@ -49,7 +49,9 @@ const CandidateForm = ({ jobId, jobTitle }) => {
 
   const copyTrackingId = async () => {
     if (formStatus.trackingId) {
-      await navigator.clipboard.writeText(formStatus.trackingId);
+      try {
+        await navigator.clipboard.writeText(formStatus.trackingId);
+      } catch {}
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     }
@@ -59,7 +61,9 @@ const CandidateForm = ({ jobId, jobTitle }) => {
     if (formStatus.success) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (formStatus.trackingId) {
-        sessionStorage.setItem("lastTrackingId", formStatus.trackingId);
+        try {
+          sessionStorage.setItem("lastTrackingId", formStatus.trackingId);
+        } catch {}
         navigator.clipboard.writeText(formStatus.trackingId).catch(() => {});
       }
     }
@@ -266,10 +270,13 @@ const CandidateForm = ({ jobId, jobTitle }) => {
       }
 
       // 3. Save tracking_id separately (best-effort; works once DB column exists)
-      try {
-        await updateCandidateTrackingId(candidateId, trackingId);
-      } catch (e) {
-        console.warn("Could not save tracking_id (column may not exist yet):", e.message);
+      const trackingSave = await updateCandidateTrackingId(candidateId, trackingId);
+      if (!trackingSave.success) {
+        console.warn("Could not save tracking_id:", trackingSave.error);
+        // Store tracking_id in sessionStorage as fallback so Track Application page can still look it up
+        try {
+          sessionStorage.setItem("lastTrackingId", trackingId);
+        } catch {}
       }
 
       if (jobId) {
@@ -283,6 +290,8 @@ const CandidateForm = ({ jobId, jobTitle }) => {
         };
         const applyRes = await applyToJob(jobId, applicationPayload);
         if (applyRes.error) {
+          // Rollback: remove orphaned candidate record
+          await deleteCandidateRecord(candidateId);
           throw new Error(`Failed to submit job application: ${applyRes.error}`);
         }
       }

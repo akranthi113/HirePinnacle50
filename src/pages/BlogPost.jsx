@@ -3,6 +3,20 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchBlogBySlug } from "../firebase/blogs";
 
+// Simple HTML sanitizer: strips <script> tags and event-handler attributes
+function sanitizeHtml(html) {
+  if (!html) return "";
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  div.querySelectorAll("script, iframe, object, embed").forEach((el) => el.remove());
+  div.querySelectorAll("*").forEach((el) => {
+    for (const attr of [...el.attributes]) {
+      if (/^on\w+/i.test(attr.name)) el.removeAttribute(attr.name);
+    }
+  });
+  return div.innerHTML;
+}
+
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -10,12 +24,6 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [shareMessage, setShareMessage] = useState("");
-
-  useEffect(() => {
-    document.title = post 
-      ? `${post.title} | PlaceIO Blog` 
-      : "Blog Post | PlaceIO";
-  }, [post]);
 
   const handleShare = async () => {
     const url = `${window.location.origin}/HirePinnacle50/blog/${slug}`;
@@ -90,7 +98,7 @@ const BlogPost = () => {
         <div className="flex items-center text-sm text-slate-600 mb-6">
           <span>{new Date(post.created_at).toLocaleDateString()}</span>
         </div>
-        <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed mb-8" dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed mb-8" dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }} />
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}

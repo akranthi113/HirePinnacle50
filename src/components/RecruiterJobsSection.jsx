@@ -5,6 +5,19 @@ import { Link } from "react-router-dom";
 import AddJobForm from "../components/AddJobForm";
 import { AlertTriangle } from "lucide-react";
 
+function sanitizeHtml(html) {
+  if (!html) return "";
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  div.querySelectorAll("script, iframe, object, embed").forEach((el) => el.remove());
+  div.querySelectorAll("*").forEach((el) => {
+    for (const attr of [...el.attributes]) {
+      if (/^on\w+/i.test(attr.name)) el.removeAttribute(attr.name);
+    }
+  });
+  return div.innerHTML;
+}
+
 const RecruiterJobsSection = ({ currentUser, refreshApplications }) => {
   const [jobs, setJobs] = useState([]);
   const [blogs, setBlogs] = useState([]);
@@ -174,7 +187,7 @@ const RecruiterJobsSection = ({ currentUser, refreshApplications }) => {
                 )}
                 <h3 className="font-bold text-xl text-slate-900 mb-2">{blog.title}</h3>
                 <p className="text-sm text-slate-500 mb-3">{new Date(blog.created_at).toLocaleDateString()}</p>
-                <div className="mt-2 text-sm text-slate-700 line-clamp-2 font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: blog.content }} />
+                <div className="mt-2 text-sm text-slate-700 line-clamp-2 font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(blog.content) }} />
               </div>
               <div className="mt-6 flex space-x-3 pt-4 border-t border-slate-200">
                 <button
