@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://akranthi113.github.io/HirePinnacle50/sitemap.xml

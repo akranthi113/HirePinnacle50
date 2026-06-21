@@ -10,6 +10,12 @@ const Apply = () => {
   const [jobError, setJobError] = useState("");
 
   useEffect(() => {
+    document.title = selectedJob 
+      ? `Apply: ${selectedJob.title} | PlaceIO`
+      : "Apply for Jobs | PlaceIO";
+  }, [selectedJob]);
+
+  useEffect(() => {
     const loadJob = async () => {
       if (!jobId) return;
       setLoadingJob(true);

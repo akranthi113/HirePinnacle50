@@ -12,6 +12,10 @@ const BlogList = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
+  useEffect(() => {
+    document.title = "Blog | PlaceIO - Recruitment Insights & Career Tips";
+  }, []);
+
   const load = async () => {
     const { blogs: fetchedBlogs, error } = await fetchBlogs();
     if (!error) setBlogs(fetchedBlogs);

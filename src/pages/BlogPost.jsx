@@ -11,6 +11,12 @@ const BlogPost = () => {
   const [error, setError] = useState(null);
   const [shareMessage, setShareMessage] = useState("");
 
+  useEffect(() => {
+    document.title = post 
+      ? `${post.title} | PlaceIO Blog` 
+      : "Blog Post | PlaceIO";
+  }, [post]);
+
   const handleShare = async () => {
     const url = `${window.location.origin}/HirePinnacle50/blog/${slug}`;
     try {

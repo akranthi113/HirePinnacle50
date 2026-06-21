@@ -15,6 +15,11 @@ const JobsPage = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
+  // Set page title
+  useEffect(() => {
+    document.title = "Job Opportunities | PlaceIO";
+  }, []);
+
   // Load jobs from Supabase
   useEffect(() => {
     const load = async () => {
