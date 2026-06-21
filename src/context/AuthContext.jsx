@@ -118,12 +118,15 @@ export const AuthProvider = ({ children }) => {
       setIsAnonymous(false);
       const profile = await fetchUserProfile(data.user.id);
 
-      if (profile) {
-        await supabase
-          .from("users")
-          .update({ lastActive: new Date().toISOString() })
-          .eq("uid", data.user.id);
+      if (!profile) {
+        await supabase.auth.signOut();
+        throw new Error("Your profile could not be found. Please contact the administrator.");
       }
+
+      await supabase
+        .from("users")
+        .update({ lastActive: new Date().toISOString() })
+        .eq("uid", data.user.id);
 
       return { user: data.user, error: null };
     } catch (error) {
