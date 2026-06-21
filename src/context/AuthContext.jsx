@@ -27,6 +27,23 @@ export const AuthProvider = ({ children }) => {
   // Helper box compatibility
   const toggleMockMode = (active) => {};
 
+  // Logout
+  const logout = async () => {
+    try {
+      setLoading(true);
+      await supabase.auth.signOut();
+      setUserProfile(null);
+      setCurrentUser(null);
+      setIsAnonymous(false);
+      return { error: null };
+    } catch (error) {
+      console.error("Logout error:", error);
+      return { error: error.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!currentUser || isAnonymous) return;
 
@@ -142,23 +159,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Login error:", error);
       return { user: null, error: error.message };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Logout
-  const logout = async () => {
-    try {
-      setLoading(true);
-      await supabase.auth.signOut();
-      setUserProfile(null);
-      setCurrentUser(null);
-      setIsAnonymous(false);
-      return { error: null };
-    } catch (error) {
-      console.error("Logout error:", error);
-      return { error: error.message };
     } finally {
       setLoading(false);
     }

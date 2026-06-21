@@ -5,7 +5,7 @@ import { exportToCSV } from "../utils/exportCSV";
 import AnalyticsCards from "./AnalyticsCards";
 import NotificationBadge from "./NotificationBadge";
 import CandidateRow from "./CandidateRow";
-import { Search, Filter, RefreshCw, Download, CheckCircle, AlertCircle, LayoutGrid } from "lucide-react";
+import { Search, Filter, RefreshCw, Download, CheckCircle, AlertCircle, LayoutGrid, AlertTriangle } from "lucide-react";
 
 const Dashboard = ({ candidates, contactMessages, applications = [], refreshData, updateCandidateStatus, deleteContactMessage, deleteCandidateRecord, loading = false }) => {
   const { currentUser, userProfile } = useAuth();
@@ -34,6 +34,9 @@ const Dashboard = ({ candidates, contactMessages, applications = [], refreshData
 
   // Notifications
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+
+  // Confirm modal state
+  const [confirmModal, setConfirmModal] = useState({ show: false, title: "", message: "", onConfirm: null });
 
   const triggerToast = (message, type = "success") => {
     setToast({ show: true, message, type });
@@ -93,33 +96,46 @@ const Dashboard = ({ candidates, contactMessages, applications = [], refreshData
   };
 
   const handleDeleteCandidate = async (candidateId) => {
-    const confirmed = window.confirm("Delete this candidate record? This action cannot be undone.");
-    if (!confirmed) return;
-
-    const { success, error } = await deleteCandidateRecord(candidateId);
-    if (!success) {
-      triggerToast(error || "Unable to delete candidate.", "error");
-      return;
-    }
-
-    triggerToast("Candidate record deleted.");
-    setCandidates((prev) => prev.filter((c) => c.id !== candidateId));
+    setConfirmModal({
+      show: true,
+      title: "Delete Candidate?",
+      message: "This action cannot be undone. All candidate details will be permanently removed.",
+      onConfirm: async () => {
+        const { success, error } = await deleteCandidateRecord(candidateId);
+        if (!success) {
+          triggerToast(error || "Unable to delete candidate.", "error");
+          return;
+        }
+        triggerToast("Candidate record deleted.");
+        setCandidates((prev) => prev.filter((c) => c.id !== candidateId));
+      }
+    });
   };
 
   const handleDeleteContact = async (messageId) => {
-    const confirmed = window.confirm("Delete this contact inquiry? This action cannot be undone.");
-    if (!confirmed) return;
+    setConfirmModal({
+      show: true,
+      title: "Delete Contact Inquiry?",
+      message: "This action cannot be undone. The message will be permanently removed.",
+      onConfirm: async () => {
+        console.log('Attempting to delete contact message with id:', messageId);
+        const { success, error } = await deleteContactMessage(messageId);
+        if (!success) {
+          console.error('Delete contact message failed:', error);
+          triggerToast(error || "Unable to delete contact message.", "error");
+          return;
+        }
+        triggerToast("Contact inquiry deleted.");
+        setContactMessagesState((prev) => prev.filter((msg) => msg.id !== messageId));
+      }
+    });
+  };
 
-    console.log('Attempting to delete contact message with id:', messageId);
-    const { success, error } = await deleteContactMessage(messageId);
-    if (!success) {
-      console.error('Delete contact message failed:', error);
-      triggerToast(error || "Unable to delete contact message.", "error");
-      return;
+  const handleConfirm = async () => {
+    if (confirmModal.onConfirm) {
+      await confirmModal.onConfirm();
     }
-
-    triggerToast("Contact inquiry deleted.");
-    setContactMessagesState((prev) => prev.filter((msg) => msg.id !== messageId));
+    setConfirmModal({ show: false, title: "", message: "", onConfirm: null });
   };
 
   const handleExportCSV = () => {
@@ -418,6 +434,32 @@ const Dashboard = ({ candidates, contactMessages, applications = [], refreshData
           </table>
         </div>
       </div>
+
+      {confirmModal.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-xl shadow-xl border border-slate-200 p-6 max-w-sm w-full">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 border border-rose-100 mx-auto mb-4">
+              <AlertTriangle className="w-6 h-6 text-rose-500" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 text-center mb-2">{confirmModal.title}</h3>
+            <p className="text-sm text-slate-600 text-center mb-6 font-light">{confirmModal.message}</p>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setConfirmModal({ show: false, title: "", message: "", onConfirm: null })}
+                className="flex-1 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-lg transition text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="flex-1 py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg transition text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -3,12 +3,16 @@ import { fetchJobsByRecruiter, deleteJob } from "../firebase/jobs";
 import { fetchBlogsByAuthor, deleteBlog } from "../firebase/blogs";
 import { Link } from "react-router-dom";
 import AddJobForm from "../components/AddJobForm";
+import { AlertTriangle } from "lucide-react";
 
 const RecruiterJobsSection = ({ currentUser, refreshApplications }) => {
   const [jobs, setJobs] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteType, setDeleteType] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const loadJobs = async () => {
     setLoading(true);
@@ -30,18 +34,29 @@ const RecruiterJobsSection = ({ currentUser, refreshApplications }) => {
   }, [currentUser]);
 
   const handleDeleteJob = async (id) => {
-    if (window.confirm("Delete this job posting? This will also remove any candidate applications associated with it.")) {
-      await deleteJob(id);
-      loadJobs();
-      if (refreshApplications) refreshApplications();
-    }
+    setDeleteTarget(id);
+    setDeleteType("job");
   };
 
   const handleDeleteBlog = async (id) => {
-    if (window.confirm("Delete this blog post?")) {
-      await deleteBlog(id);
+    setDeleteTarget(id);
+    setDeleteType("blog");
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTarget || !deleteType) return;
+    setDeleting(true);
+    if (deleteType === "job") {
+      await deleteJob(deleteTarget);
+      loadJobs();
+      if (refreshApplications) refreshApplications();
+    } else {
+      await deleteBlog(deleteTarget);
       loadBlogs();
     }
+    setDeleting(false);
+    setDeleteTarget(null);
+    setDeleteType(null);
   };
 
   return (
@@ -108,15 +123,42 @@ const RecruiterJobsSection = ({ currentUser, refreshApplications }) => {
                 </button>
               </div>
             </div>
-          ))}
+        ))}
+      </div>
+    )}
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-xl shadow-xl border border-slate-200 p-6 max-w-sm w-full">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 border border-rose-100 mx-auto mb-4">
+              <AlertTriangle className="w-6 h-6 text-rose-500" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 text-center mb-2">
+              Delete {deleteType === "job" ? "Job Posting" : "Blog Post"}?
+            </h3>
+            <p className="text-sm text-slate-600 text-center mb-6 font-light">
+              {deleteType === "job"
+                ? "This will permanently remove this job and all associated applications."
+                : "This will permanently remove this blog post."}
+            </p>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => { setDeleteTarget(null); setDeleteType(null); }}
+                className="flex-1 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-lg transition text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="flex-1 py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg transition text-sm disabled:opacity-50"
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
-
-      {/* Blogs Section */}
-      <div className="mb-8 mt-12">
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Your Blog Postings</h2>
-        <p className="text-slate-600 text-sm mt-1 font-light">Articles you've shared with candidates</p>
-      </div>
 
       {blogs.length === 0 ? (
         <div className="bg-white p-10 rounded-2xl text-center border border-slate-200 shadow-sm">

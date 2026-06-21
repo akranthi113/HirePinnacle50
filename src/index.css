@@ -12,6 +12,15 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .bg-hero-pattern {
   background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 40%),
               radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.1), transparent 40%),

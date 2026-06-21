@@ -25,7 +25,7 @@ const JobsPage = () => {
   }, []);
 
   // Derive filtered jobs with useMemo to avoid extra state and effect
-  const filteredJobs = React.useMemo(() => {
+  const filteredJobs = useMemo(() => {
     return jobs.filter((j) => {
       const titleMatch = j.title.toLowerCase().includes(searchTitle.toLowerCase());
       const locationMatch = j.location.toLowerCase().includes(searchLocation.toLowerCase());

@@ -32,7 +32,7 @@ const HeroSection = ({ onLearnMoreClick }) => {
         <div className="animate-slide-up flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6" style={{ animationDelay: '0.2s' }}>
           <Link
             to="/apply"
-            className="w-full sm:w-auto flex items-center justify-center btn-primary text-lg px-8 py-4 shadow-[0_0_30px_rgba(59,130,246,0.4)]"
+            className="w-full sm:w-auto flex items-center justify-center btn-primary text-lg px-8 py-4 shadow-[0_0_30px_rgba(59,130,246,0.4)] group"
           >
             Find Opportunities
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

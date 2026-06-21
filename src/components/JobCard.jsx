@@ -1,15 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { AlertTriangle } from "lucide-react";
 
-/**
- * JobCard – displays a concise job summary.
- * Props:
- *   job: job object containing title, location, description, job_type, experience_level, recruiter_id, id
- *   isOwner: boolean indicating if the current user is the recruiter who posted the job
- *   onViewDetails: callback to open the job detail view
- *   onApply: callback to initiate application process
- *   onDelete: callback after successful deletion (e.g., refresh list)
- */
 const JobCard = ({ job, isOwner, onViewDetails, onApply, onDelete }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const handleView = () => {
     if (onViewDetails) onViewDetails();
   };
@@ -19,9 +13,10 @@ const JobCard = ({ job, isOwner, onViewDetails, onApply, onDelete }) => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Delete this job?")) {
-      if (onDelete) onDelete();
-    }
+    setDeleting(true);
+    if (onDelete) onDelete();
+    setDeleting(false);
+    setShowDeleteModal(false);
   };
 
   return (
@@ -68,12 +63,41 @@ const JobCard = ({ job, isOwner, onViewDetails, onApply, onDelete }) => {
         )}
         {isOwner && (
           <button 
-            onClick={handleDelete} 
+            onClick={() => setShowDeleteModal(true)}
             className="p-2.5 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 rounded-xl transition-colors duration-200 border border-transparent hover:border-rose-500/30"
             title="Delete Job"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
           </button>
+        )}
+
+        {showDeleteModal && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm rounded-2xl p-4">
+            <div className="bg-white rounded-xl shadow-xl border border-slate-200 p-6 max-w-sm w-full">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 border border-rose-100 mx-auto mb-4">
+                <AlertTriangle className="w-6 h-6 text-rose-500" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 text-center mb-2">Delete Job?</h3>
+              <p className="text-sm text-slate-600 text-center mb-6 font-light">
+                This will permanently remove this job posting. This action cannot be undone.
+              </p>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="flex-1 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-lg transition text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex-1 py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg transition text-sm disabled:opacity-50"
+                >
+                  {deleting ? "Deleting..." : "Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

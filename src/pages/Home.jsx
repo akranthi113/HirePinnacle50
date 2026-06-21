@@ -50,7 +50,7 @@ const Home = () => {
               <div className="bg-slate-50 group-hover:bg-brand-primary/10 p-4 rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-6 border border-slate-200 transition-all duration-300">
                 <Briefcase className="w-8 h-8 text-brand-primary group-hover:scale-110 transition-transform" />
               </div>
-              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">500+</p>
+              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">5k+</p>
               <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Candidates Placed</p>
             </div>
 
@@ -58,7 +58,7 @@ const Home = () => {
               <div className="bg-slate-50 group-hover:bg-indigo-500/10 p-4 rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-6 border border-slate-200 transition-all duration-300">
                 <Building className="w-8 h-8 text-indigo-500 group-hover:scale-110 transition-transform" />
               </div>
-              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">50+</p>
+              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">200+</p>
               <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Hiring Partners</p>
             </div>
 
@@ -66,16 +66,16 @@ const Home = () => {
               <div className="bg-slate-50 group-hover:bg-purple-500/10 p-4 rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-6 border border-slate-200 transition-all duration-300">
                 <Award className="w-8 h-8 text-purple-500 group-hover:scale-110 transition-transform" />
               </div>
-              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">10+</p>
-              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Industries Served</p>
+              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">98%</p>
+              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Client Satisfaction</p>
             </div>
 
             <div className="glassmorphism glassmorphism-hover p-8 rounded-2xl text-center group">
               <div className="bg-slate-50 group-hover:bg-brand-accent/10 p-4 rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-6 border border-slate-200 transition-all duration-300">
                 <Smile className="w-8 h-8 text-brand-accent group-hover:scale-110 transition-transform" />
               </div>
-              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">95%</p>
-              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Client Satisfaction</p>
+              <p className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">24/7</p>
+              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Support Available</p>
             </div>
           </div>
         </div>
