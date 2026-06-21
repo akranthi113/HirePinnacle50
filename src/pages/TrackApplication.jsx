@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { getCandidateByTrackingId } from "../firebase/firestore";
 import { Search, CheckCircle, XCircle, Clock, AlertCircle, History, X } from "lucide-react";
 
-const TRACKING_HISTORY_KEY = "trackingIdHistory";
+const SINGLE_KEY = "lastTrackingId";
+const HISTORY_KEY = "trackingIdHistory";
 
 const TrackApplication = () => {
   const [trackingId, setTrackingId] = useState("");
@@ -13,12 +14,20 @@ const TrackApplication = () => {
   const [showHistory, setShowHistory] = useState(false);
   const wrapperRef = useRef(null);
 
+  const loadFromStorage = (id) => {
+    if (!id) return;
+    setTrackingId(id);
+    trackId(id);
+  };
+
   useEffect(() => {
-    const stored = sessionStorage.getItem(TRACKING_HISTORY_KEY);
-    if (stored) {
-      try {
-        setHistory(JSON.parse(stored));
-      } catch {}
+    const storedSingle = sessionStorage.getItem(SINGLE_KEY);
+    const storedHistory = sessionStorage.getItem(HISTORY_KEY);
+    if (storedHistory) {
+      try { setHistory(JSON.parse(storedHistory)); } catch {}
+    }
+    if (storedSingle) {
+      loadFromStorage(storedSingle);
     }
   }, []);
 
@@ -32,17 +41,13 @@ const TrackApplication = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleTrack = async (e, idOverride) => {
-    e?.preventDefault();
-    const id = (idOverride || trackingId).trim().toUpperCase();
-    if (!id) return;
+  const trackId = async (id) => {
+    const trimmed = id.trim().toUpperCase();
+    if (!trimmed) return;
     setShowHistory(false);
     setLoading(true);
     setError("");
     setCandidate(null);
-
-    const trimmed = id.trim();
-    if (!trimmed) { setLoading(false); return; }
 
     try {
       const result = await getCandidateByTrackingId(trimmed);
@@ -55,13 +60,20 @@ const TrackApplication = () => {
         setTrackingId(trimmed);
         const newHistory = [trimmed, ...history.filter((h) => h !== trimmed)].slice(0, 5);
         setHistory(newHistory);
-        sessionStorage.setItem(TRACKING_HISTORY_KEY, JSON.stringify(newHistory));
+        sessionStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
+        sessionStorage.setItem(SINGLE_KEY, trimmed);
       }
     } catch (err) {
       setError("Something went wrong. Please try again later.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTrack = async (e) => {
+    e?.preventDefault?.();
+    if (!trackingId.trim()) return;
+    await trackId(trackingId);
   };
 
   const getStatusIcon = (status) => {
@@ -78,7 +90,7 @@ const TrackApplication = () => {
 
   const clearHistory = () => {
     setHistory([]);
-    sessionStorage.removeItem(TRACKING_HISTORY_KEY);
+    sessionStorage.removeItem(HISTORY_KEY);
   };
 
   return (
